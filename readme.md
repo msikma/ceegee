@@ -25,6 +25,6 @@ online on C programming in general and MSDOS programming in particular.
 Dependencies
 ------------
 
-* [argparse](https://github.com/Cofyc/argparse) (4.4)
-* [Allegro](http://liballeg.org/)
+* [argparse](https://github.com/Cofyc/argparse)
+* [Allegro](http://liballeg.org/) (4.4)
 * [xorshift](https://github.com/WebDrake/xorshift)
