@@ -5,21 +5,25 @@ Small C project that I'm working on to teach myself the language.
 This is designed for MS-DOS, meaning you need DJGPP to compile it. It uses
 the VGA adapter.
 
-Clone *argparse* and *Allegro* in a subdirectory named `vendor`. The
-installation will be automated soon.
 
+Installation
+------------
 
-Sources
---------
+To download vendor-specific code, run the `vendor.sh` script. This will
+clone several Git repositories into the `vendor/` directory, which it will
+create if it doesn't exist.
 
-This couldn't have been built without the excellent information available
-online on C programming in general and MSDOS programming in particular.
+### Setting up DJGPP
 
-* [DJGPP VGA access](http://www.delorie.com/djgpp/doc/brennan/brennan_access_vga.html)
-* [Fast access to absolute addresses](http://www.delorie.com/djgpp/v2faq/faq18_6.html)
-* [Allegro forums](https://www.allegro.cc/forums/index)
-* [Allegro 4.4.2 docs](http://liballeg.org/stabledocs/en/allegro.html)
-* [How do I use extern to share variables between source files in C? (Stack Overflow)](http://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files-in-c)
+To compile the engine, you'll need to have DJGPP set up to be able to
+compile for MS-DOS.
+
+(Guide will be written soon.)
+
+Set an environment variable $DJGPP_CC to the path of your DJGPP GCC binary.
+For example, you could add the following to your `~/.bashrc` file:
+
+    export DJGPP_CC=/usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc
 
 
 Dependencies
@@ -27,4 +31,4 @@ Dependencies
 
 * [argparse](https://github.com/Cofyc/argparse)
 * [Allegro](http://liballeg.org/) (4.4)
-* [xorshift](https://github.com/WebDrake/xorshift)
+* [xorshift](https://github.com/msikma/xorshift)
