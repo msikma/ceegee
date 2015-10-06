@@ -20,7 +20,7 @@ compile for MS-DOS.
 
 (Guide will be written soon.)
 
-Set an environment variable $DJGPP_CC to the path of your DJGPP GCC binary.
+Set an environment variable `$DJGPP_CC` to the path of your DJGPP GCC binary.
 For example, you could add the following to your `~/.bashrc` file:
 
     export DJGPP_CC=/usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc
