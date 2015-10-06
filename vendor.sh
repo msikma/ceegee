@@ -3,7 +3,7 @@
 # MIT License
 
 DEPS=(
-    'argparse::https://github.com/Cofyc/argparse.git::master'
+    'argparse::https://github.com/Cofyc/argparse.git::v1.0.0'
     'allegro::https://github.com/liballeg/allegro5.git::4.4'
     'xorshift::https://github.com/msikma/xorshift::master'
 )
