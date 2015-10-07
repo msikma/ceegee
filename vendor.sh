@@ -4,7 +4,7 @@
 
 DEPS=(
     'argparse::https://github.com/Cofyc/argparse.git::v1.0.0'
-    'allegro::https://github.com/liballeg/allegro5.git::4.4'
+    'allegro::https://github.com/liballeg/allegro5.git::4.3'
     'xorshift::https://github.com/msikma/xorshift::master'
 )
 mkdir -p vendor
@@ -25,7 +25,3 @@ for n in "${DEPS[@]}" ; do
         echo "Cloned $url into 'vendor/$name' ('$branch')"
     fi
 done
-
-if [ -z ${DJGPP_CC+x} ]; then
-    printf "\nTo compile, you'll need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc\n"
-fi

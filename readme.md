@@ -5,6 +5,8 @@ Small C project that I'm working on to teach myself the language.
 This is designed for MS-DOS, meaning you need DJGPP to compile it. It uses
 the VGA adapter.
 
+This project is still in the very early stages and doesn't work yet!
+
 
 Installation
 ------------
