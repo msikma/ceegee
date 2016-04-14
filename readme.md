@@ -18,9 +18,10 @@ create if it doesn't exist.
 ### Setting up DJGPP
 
 To compile the engine, you'll need to have DJGPP set up to be able to
-compile for MS-DOS.
-
-(Guide will be written soon.)
+compile for MS-DOS. You can either get a pre-built release or build
+the whole thing from source—follow the instructions on
+[andrewwutw/build-djgpp](https://github.com/andrewwutw/build-djgpp) to get
+a working compiler.
 
 Set an environment variable `$DJGPP_CC` to the path of your DJGPP GCC binary.
 For example, you could add the following to your `~/.bashrc` file:
@@ -32,5 +33,4 @@ Dependencies
 ------------
 
 * [argparse](https://github.com/Cofyc/argparse)
-* [Allegro](http://liballeg.org/) (4.4)
 * [xorshift](https://github.com/msikma/xorshift)
