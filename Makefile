@@ -3,7 +3,7 @@
 
 CC        = $(DJGPP_CC)
 VENDOR    = vendor
-CFLAGS    = -Ivendor/allegro/include -Ivendor/allegro -DHAVE_STDBOOL_H=1
+CFLAGS    = -DHAVE_STDBOOL_H=1
 LDFLAGS   =
 
 TITLE     = CeeGee Engine
@@ -19,9 +19,8 @@ STATIC    = $(shell find $(STATICDIR) -name "*.*")
 STATICDEST= $(subst $(STATICDIR),$(DISTDIR),$(STATIC))
 
 # All source files (*.c) and their corresponding object files.
-SRC       = $(shell find $(SRCDIR) -name "*.c" -not -path "$(VENDOR)/allegro/*") \
-            $(shell find $(VENDOR) -name "*.c" -not -name "test_*.c" -not -path "$(VENDOR)/allegro/*" 2> /dev/null) \
-            $(shell find "$(VENDOR)/allegro/src" -name "*.c" -not -path "$(VENDOR)/allegro/src/beos/*" -not -path "$(VENDOR)/allegro/src/compat/*" 2> /dev/null)
+SRC       = $(shell find $(SRCDIR) -name "*.c" 2> /dev/null) \
+			$(shell find $(VENDOR) -name "*.c" -not -name "test_*.c" 2> /dev/null)
 OBJS      = $(SRC:%.c=%.o)
 
 # Some information from Git that we'll use for the version indicator file.
