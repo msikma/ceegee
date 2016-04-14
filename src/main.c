@@ -24,7 +24,7 @@ int main(int argc, const char **argv)
             run_vga_test();
             break;
         default:
-            printf("starting game...\n");
+            printf("starting game...\r\n");
             break;
     }
 
