@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (C) 2015, Michiel Sikma <michiel@sikma.org>
+# Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>
 # MIT License
 
 DEPS=(

@@ -1,4 +1,4 @@
-# Copyright (C) 2015, Michiel Sikma <michiel@sikma.org>
+# Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>
 # MIT License
 
 CC        = $(DJGPP_CC)

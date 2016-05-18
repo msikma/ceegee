@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-(C) 2015, Michiel Sikma
+(C) 2015-2016, Michiel Sikma
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

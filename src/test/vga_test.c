@@ -3,7 +3,7 @@
  * Taken from the excellent VGA tutorials by David Brackeen.
  * <http://www.brackeen.com/vga/shapes.html>
  *
- * Copyright (C) 2015, Michiel Sikma <michiel@sikma.org>, David Brackeen
+ * Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>, David Brackeen
  * MIT License
  */
 
