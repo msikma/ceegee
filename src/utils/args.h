@@ -10,7 +10,7 @@
 #define ARG_RUN_TEST 2
 
 static char *filename(char *path);
-int handle_command_line_args(int argc, const char **argv);
+int handle_args(int argc, const char **argv);
 int parse_args(int argc, const char **argv);
 
 #endif

@@ -5,14 +5,14 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <argparse.h>
 
 #include "args.h"
-#include "../../vendor/argparse/argparse.h"
 
 /**
  * Retrieves the current filename. In DOS, argv[0] contains a path.
  * We strip out everything except the actual filename.
- * Currently unused.
+ * Currently unused. TODO: use this.
  */
 static char *filename(char *path)
 {
@@ -39,8 +39,7 @@ int parse_args(int argc, const char **argv)
         "ceegee.exe [options] [[--] args]",
         NULL,
     };
-    char* info_header = "\nAdd header text here.";
-    char* info_footer = "\nAdd footer text here.";
+    char* info_footer = "\nInternet users find our latest software at:\nhttps://github.com/msikma/ceegee";
 
     // The flags we'll check for.
     int test = 0;
@@ -55,7 +54,7 @@ int parse_args(int argc, const char **argv)
     };
 
     argparse_init(&argparse, options, usage, 0);
-    argparse_describe(&argparse, info_header, info_footer);
+    argparse_describe(&argparse, NULL, info_footer);
     argc = argparse_parse(&argparse, argc, argv);
 
     if (test != 0) {
@@ -67,7 +66,7 @@ int parse_args(int argc, const char **argv)
 /**
  * Handles the command line arguments.
  */
-int handle_command_line_args(int argc, const char **argv)
+int handle_args(int argc, const char **argv)
 {
     if (argc <= 1) {
         return ARG_NOTHING;

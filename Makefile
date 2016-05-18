@@ -1,17 +1,17 @@
 # Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>
-# MIT License
+# MIT license
 
 CC        = $(DJGPP_CC)
 VENDOR    = vendor
-CFLAGS    = -DHAVE_STDBOOL_H=1
-LDFLAGS   =
+CFLAGS    = -DHAVE_STDBOOL_H=1 -fgnu89-inline -Ivendor/allegro-4.2.2-xc/include -Ivendor/argparse -Ivendor/xorshift
+LDFLAGS   = -Lvendor/allegro-4.2.2-xc/lib/djgpp -lalleg
 
 TITLE     = CeeGee Engine
 BIN       = ceegee.exe
 SRCDIR    = src
 OBJDIR    = obj
 DISTDIR   = dist
-STATICDIR = src/static
+STATICDIR = static
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory.
@@ -20,7 +20,8 @@ STATICDEST= $(subst $(STATICDIR),$(DISTDIR),$(STATIC))
 
 # All source files (*.c) and their corresponding object files.
 SRC       = $(shell find $(SRCDIR) -name "*.c" 2> /dev/null) \
-			$(shell find $(VENDOR) -name "*.c" -not -name "test_*.c" 2> /dev/null)
+            $(shell find $(VENDOR)/argparse -name "*.c" -not -name "test_*.c" 2> /dev/null) \
+            $(shell find $(VENDOR)/xorshift -name "*.c" -not -name "test_*.c" 2> /dev/null)
 OBJS      = $(SRC:%.c=%.o)
 
 # Some information from Git that we'll use for the version indicator file.
