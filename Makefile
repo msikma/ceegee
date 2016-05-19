@@ -15,7 +15,7 @@ STATICDIR = static
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory.
-STATIC    = $(shell find $(STATICDIR) -name "*.*")
+STATIC    = $(shell find $(STATICDIR) -name "*.*" -not -name ".*" 2> /dev/null)
 STATICDEST= $(subst $(STATICDIR),$(DISTDIR),$(STATIC))
 
 # All source files (*.c) and their corresponding object files.
@@ -52,6 +52,7 @@ ${DISTDIR}/${BIN}: ${OBJS} | check_djgpp
 	${CC} -o ${DISTDIR}/${BIN} $+ ${LDFLAGS}
 
 ${STATICDEST}: ${STATIC}
+	@mkdir -p $(shell dirname $@)
 	cp $< $@
 
 all: dir version ${DISTDIR}/${BIN} ${STATICDEST}
