@@ -4,6 +4,9 @@ _stuff/
 # Vendor files
 vendor/
 
+# Builds
+dist/
+
 # Object files
 *.o
 *.ko
