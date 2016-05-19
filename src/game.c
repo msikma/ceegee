@@ -7,21 +7,18 @@
 #include <stdio.h>
 
 #include "game.h"
+#include "midi.h"
+
+// Whether Allegro is initialized.
+int ALLEGRO_INITIALIZED = 0;
 
 /**
  * Runs the game itself. At the moment it just shows a "hello world" though.
  * Returns status code.
  */
 int start_game() {
-    // Initializes the Allegro library.
-    if (allegro_init() != 0) {
-        return 1;
-    }
+    initialize();
 
-    // Installs the Allegro keyboard interrupt handler.
-    install_keyboard();
-
-    // Switch to graphics mode, 320x200.
     if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
         set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
         printf("Cannot set graphics mode:\r\n%s\r\n", allegro_error);
@@ -33,10 +30,31 @@ int start_game() {
     clear_to_color(screen, makecol(255, 255, 255));
     textout_centre_ex(screen, font, "Hello, world!", SCREEN_W / 2, SCREEN_H / 2, makecol(0,0,0), -1);
 
-    // Wait for a keypress, then finish the program.
+    // Play music, then exit after a keypress.
+    music_start("music\\wit2.mid");
     readkey();
+    music_stop();
     shutdown();
     return 0;
+}
+
+/**
+ * Starts up Allegro. Used once at the start of the program.
+ * Prevents accidental double initializations.
+ */
+int initialize() {
+    if (ALLEGRO_INITIALIZED == 1) {
+        return 0;
+    }
+    if (allegro_init() != 0) {
+        printf("Cannot initialize Allegro:\r\n%s\r\n", allegro_error);
+        return 1;
+    }
+
+    install_timer();
+    install_keyboard();
+
+    ALLEGRO_INITIALIZED = 1;
 }
 
 /**

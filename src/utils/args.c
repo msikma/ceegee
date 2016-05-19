@@ -43,6 +43,7 @@ int parse_args(int argc, const char **argv)
 
     // The flags we'll check for.
     int test = 0;
+    int juke = 0;
 
     // Build the argparse object itself.
     struct argparse argparse;
@@ -50,15 +51,19 @@ int parse_args(int argc, const char **argv)
         OPT_GROUP("Basic options"),
         OPT_HELP(),
         OPT_BOOLEAN('t', "test", &test, "runs a series of tests"),
+        OPT_BOOLEAN('j', "jukebox", &juke, "plays a song from the jukebox"),
         OPT_END(),
     };
 
     argparse_init(&argparse, options, usage, 0);
     argparse_describe(&argparse, NULL, info_footer);
     argc = argparse_parse(&argparse, argc, argv);
-
+    
     if (test != 0) {
         return ARG_RUN_TEST;
+    }
+    if (juke != 0) {
+        return ARG_JUKEBOX;
     }
     return ARG_NOTHING;
 }

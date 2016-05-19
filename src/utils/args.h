@@ -8,6 +8,7 @@
 
 #define ARG_NOTHING 1
 #define ARG_RUN_TEST 2
+#define ARG_JUKEBOX 3
 
 static char *filename(char *path);
 int handle_args(int argc, const char **argv);
