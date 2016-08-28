@@ -17,6 +17,7 @@ STATICDIR = static
 # the dist directory.
 STATIC    = $(shell find $(STATICDIR) -name "*.*" -not -name ".*" 2> /dev/null)
 STATICDEST= $(subst $(STATICDIR),$(DISTDIR),$(STATIC))
+VERFILE   = ${DISTDIR}/version.txt
 
 # All source files (*.c) and their corresponding object files.
 SRC       = $(shell find $(SRCDIR) -name "*.c" 2> /dev/null) \
@@ -30,32 +31,33 @@ BRANCH    = $(shell git describe --all | sed s@heads/@@ | awk "{print toupper($0
 COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d %T")
 
-.PHONY: clean dir version
+# Check whether DJGPP is available.
+ifndef DJGPP_CC
+  $(error To compile, you'll need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc)
+endif
+
+.PHONY: clean version static
 default: all
 
-check_djgpp:
-	@if [ -z "$$DJGPP_CC" ]; then \
-        echo "To compile, you'll need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc"; \
-        exit 2; \
-	fi
+${DISTDIR}:
+	mkdir -p ${DISTDIR}
 
-dir:
-	@mkdir -p ${DISTDIR}
+${VERFILE}:
+	echo "${TITLE}\nBuild: ${COUNT}-${BRANCH} ${DATE}\nHash: ${HASH}" > $@
 
-version:
-	@echo "${TITLE}\nBuild: ${COUNT}-${BRANCH} ${DATE}\nHash: ${HASH}" > ${DISTDIR}/version.txt
-
-%.o: %.c | check_djgpp
+%.o: %.c
 	${CC} -c -o $@ $? ${CFLAGS}
 
-${DISTDIR}/${BIN}: ${OBJS} | check_djgpp
+${DISTDIR}/${BIN}: ${OBJS}
 	${CC} -o ${DISTDIR}/${BIN} $+ ${LDFLAGS}
 
-${STATICDEST}: ${STATIC}
+${STATICDEST}: ${VERFILE}
 	@mkdir -p $(shell dirname $@)
-	cp $< $@
+	cp $(subst $(DISTDIR),$(STATICDIR),$@) $@
 
-all: dir version ${DISTDIR}/${BIN} ${STATICDEST}
+all: ${DISTDIR} version ${DISTDIR}/${BIN} ${STATICDEST}
+
+static: ${STATICDEST}
 
 clean:
 	rm -rf ${DISTDIR}
