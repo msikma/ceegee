@@ -51,7 +51,7 @@ ${VERFILE}:
 ${DISTDIR}/${BIN}: ${OBJS}
 	${CC} -o ${DISTDIR}/${BIN} $+ ${LDFLAGS}
 
-${STATICDEST}: ${VERFILE}
+${STATICDEST}: ${DISTDIR} ${VERFILE}
 	@mkdir -p $(shell dirname $@)
 	cp $(subst $(DISTDIR),$(STATICDIR),$@) $@
 
