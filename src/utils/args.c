@@ -50,17 +50,17 @@ int parse_args(int argc, const char **argv)
     struct argparse_option options[] = {
         OPT_GROUP("Basic options"),
         OPT_HELP(),
-        OPT_BOOLEAN('t', "test", &test, "runs a series of tests"),
-        OPT_BOOLEAN('j', "jukebox", &juke, "plays a song from the jukebox"),
+        OPT_BOOLEAN('v', "version", &test, "display version and exit"),
+        OPT_BOOLEAN('j', "jukebox", &juke, "play a song from the jukebox"),
         OPT_END(),
     };
 
     argparse_init(&argparse, options, usage, 0);
     argparse_describe(&argparse, NULL, info_footer);
     argc = argparse_parse(&argparse, argc, argv);
-    
+
     if (test != 0) {
-        return ARG_RUN_TEST;
+        return ARG_VERSION;
     }
     if (juke != 0) {
         return ARG_JUKEBOX;

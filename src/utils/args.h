@@ -7,7 +7,7 @@
 #define __CEEGEE_UTILS_ARGS__
 
 #define ARG_NOTHING 1
-#define ARG_RUN_TEST 2
+#define ARG_VERSION 2
 #define ARG_JUKEBOX 3
 
 static char *filename(char *path);

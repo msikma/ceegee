@@ -17,7 +17,6 @@ STATICDIR = static
 # the dist directory.
 STATIC    = $(shell find $(STATICDIR) -name "*.*" -not -name ".*" 2> /dev/null)
 STATICDEST= $(subst $(STATICDIR),$(DISTDIR),$(STATIC))
-VERFILE   = ${DISTDIR}/version.txt
 
 # All source files (*.c) and their corresponding object files.
 SRC       = $(shell find $(SRCDIR) -name "*.c" 2> /dev/null) \
@@ -26,10 +25,11 @@ SRC       = $(shell find $(SRCDIR) -name "*.c" 2> /dev/null) \
 OBJS      = $(SRC:%.c=%.o)
 
 # Some information from Git that we'll use for the version indicator file.
-HASH      = $(shell git rev-parse HEAD)
+HASH      = $(shell git rev-parse --short HEAD)
 BRANCH    = $(shell git describe --all | sed s@heads/@@ | awk "{print toupper($0)}")
 COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d %T")
+VDEF      = -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATE} (${HASH})\r\n\""
 
 # Check whether DJGPP is available.
 ifndef DJGPP_CC
@@ -42,16 +42,17 @@ default: all
 ${DISTDIR}:
 	mkdir -p ${DISTDIR}
 
-${VERFILE}:
-	echo "${TITLE}\nBuild: ${COUNT}-${BRANCH} ${DATE}\nHash: ${HASH}" > $@
-
 %.o: %.c
 	${CC} -c -o $@ $? ${CFLAGS}
+
+# Pass on the version string to the version.c file.
+src/version.o: src/version.c
+	${CC} -c -o $@ $? ${CFLAGS} ${VDEF}
 
 ${DISTDIR}/${BIN}: ${OBJS}
 	${CC} -o ${DISTDIR}/${BIN} $+ ${LDFLAGS}
 
-${STATICDEST}: ${DISTDIR} ${VERFILE}
+${STATICDEST}: ${DISTDIR}
 	@mkdir -p $(shell dirname $@)
 	cp $(subst $(DISTDIR),$(STATICDIR),$@) $@
 

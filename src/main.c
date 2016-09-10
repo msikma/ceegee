@@ -8,6 +8,7 @@
 #include "utils/args.h"
 #include "game.h"
 #include "midi.h"
+#include "version.h"
 
 /**
  * Main entrance point of the application.
@@ -18,8 +19,8 @@ int main(int argc, const char **argv) {
     int cmd = handle_args(argc, argv);
 
     switch (cmd) {
-        case ARG_RUN_TEST:
-            printf("run test\r\n");
+        case ARG_VERSION:
+            printf("%s", get_version());
             return 0;
     }
 
