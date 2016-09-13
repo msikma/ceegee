@@ -6,6 +6,6 @@
 #ifndef __CEEGEE_MAIN__
 #define __CEEGEE_MAIN__
 
-int main(int argc, const char **argv);
+int main(int argc, char **argv);
 
 #endif

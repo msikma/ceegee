@@ -9,9 +9,9 @@
 #define ARG_NOTHING 1
 #define ARG_VERSION 2
 #define ARG_JUKEBOX 3
+#define ARG_USAGE 4
 
-int handle_args(int argc, const char **argv);
-int parse_args(int argc, const char **argv);
-static char *filename(char *path);
+int parse_args(int argc, char **argv);
+void print_usage();
 
 #endif

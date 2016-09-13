@@ -3,10 +3,13 @@
 
 CC        = $(DJGPP_CC)
 VENDOR    = vendor
-CFLAGS    = -DHAVE_STDBOOL_H=1 -fgnu89-inline -Ivendor/allegro-4.2.2-xc/include -Ivendor/argparse -Ivendor/xorshift -I.
+CFLAGS    = -DHAVE_STDBOOL_H=1 -fgnu89-inline -Ivendor/allegro-4.2.2-xc/include -Ivendor/xorshift -I.
 LDFLAGS   = -Lvendor/allegro-4.2.2-xc/lib/djgpp -lalleg
 
 TITLE     = CeeGee Engine
+COPYRIGHT = (C) 2015-2016, Michiel Sikma (MIT license)
+URL       = https://github.com/msikma/ceegee
+
 BIN       = ceegee.exe
 SRCDIR    = src
 OBJDIR    = obj
@@ -20,7 +23,6 @@ STATICDEST= $(subst $(STATICDIR),$(DISTDIR),$(STATIC))
 
 # All source files (*.c) and their corresponding object files.
 SRC       = $(shell find $(SRCDIR) -name "*.c" 2> /dev/null) \
-            $(shell find $(VENDOR)/argparse -name "*.c" -not -name "test_*.c" 2> /dev/null) \
             $(shell find $(VENDOR)/xorshift -name "*.c" -not -name "test_*.c" 2> /dev/null)
 OBJS      = $(SRC:%.c=%.o)
 
@@ -29,7 +31,7 @@ HASH      = $(shell git rev-parse --short HEAD | awk '{print toupper($0)}')
 BRANCH    = $(shell git describe --all | sed s@heads/@@ | awk "{print toupper($0)}")
 COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d %T")
-VDEF      = -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATE} (${HASH})\r\n\""
+VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATE} (${HASH})\r\n\""
 
 # Check whether DJGPP is available.
 ifndef DJGPP_CC

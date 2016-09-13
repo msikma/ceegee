@@ -14,17 +14,20 @@
 /**
  * Main entrance point of the application.
  */
-int main(int argc, const char **argv) {
+int main(int argc, char **argv) {
     // Check command line arguments and run commands if necessary.
     // If no arguments were entered, the main program proceeds as normal.
-    int cmd = handle_args(argc, argv);
+    int cmd = parse_args(argc, argv);
 
     switch (cmd) {
+        case ARG_USAGE:
+            print_usage(basename(argv[0]));
+            return 0;
         case ARG_VERSION:
             print_version();
             return 0;
         case ARG_JUKEBOX:
-            start_game();
+            start_jukebox();
             return 0;
     }
 
