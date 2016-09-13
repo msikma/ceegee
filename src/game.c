@@ -33,7 +33,7 @@ int start_game() {
     }
 
     // Play music, display logos and then shut down.
-    music_start("music\\wit2.mid");
+    music_start("data\\music\\wit2.mid");
     show_startup_logos();
     music_stop();
     shutdown();
