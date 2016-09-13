@@ -8,39 +8,42 @@
 
 #include "game.h"
 #include "midi.h"
+#include "logos.h"
 
 // Whether Allegro is initialized.
 int ALLEGRO_INITIALIZED = 0;
 
 /**
- * Runs the game itself. At the moment it just shows a "hello world" though.
- * Returns status code.
+ * Starts the game after the main program is executed.
+ *
+ * This initializes Allegro, then sets the appropriate video mode and
+ * begins displaying our logos. Currently nothing else happens.
+ *
+ * Returns 1 if no appropriate graphics mode could be set, 0 otherwise.
  */
 int start_game() {
+    // Install Allegro drivers.
     initialize();
 
+    // Try to change to graphics mode. If this is not possible, return 1.
     if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
         set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
         printf("Cannot set graphics mode:\r\n%s\r\n", allegro_error);
         return 1;
     }
 
-    // Print a single line of "hello world" on a white screen.
-    set_palette(desktop_palette);
-    clear_to_color(screen, makecol(255, 255, 255));
-    textout_centre_ex(screen, font, "Hello, world!", SCREEN_W / 2, SCREEN_H / 2, makecol(0,0,0), -1);
-
-    // Play music, then exit after a keypress.
+    // Play music, display logos and then shut down.
     music_start("music\\wit2.mid");
-    readkey();
+    show_startup_logos();
     music_stop();
     shutdown();
     return 0;
 }
 
 /**
- * Starts up Allegro. Used once at the start of the program.
- * Prevents accidental double initializations.
+ * Starts up Allegro and installs its drivers. Used once at the start.
+ * Accidental double initializations are prevented. If we can't initialize
+ * for any reason, 1 is returned, otherwise 0.
  */
 int initialize() {
     if (ALLEGRO_INITIALIZED == 1) {
@@ -55,9 +58,12 @@ int initialize() {
     install_keyboard();
 
     ALLEGRO_INITIALIZED = 1;
+
+    return 0;
 }
 
 /**
+ * Returns to text mode and prints a thank you note.
  * Called just before program shutdown.
  */
 void shutdown() {
