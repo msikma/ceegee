@@ -7,5 +7,6 @@
 #define __CEEGEE_VERSION__
 
 const char * get_version();
+void print_version();
 
 #endif

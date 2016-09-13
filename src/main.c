@@ -7,6 +7,7 @@
 
 #include "src/audio/midi.h"
 #include "src/game.h"
+#include "src/jukebox.h"
 #include "src/utils/args.h"
 #include "src/utils/version.h"
 
@@ -20,7 +21,10 @@ int main(int argc, const char **argv) {
 
     switch (cmd) {
         case ARG_VERSION:
-            printf("%s", get_version());
+            print_version();
+            return 0;
+        case ARG_JUKEBOX:
+            start_game();
             return 0;
     }
 

@@ -58,7 +58,7 @@ int parse_args(int argc, const char **argv)
     argparse_init(&argparse, options, usage, 0);
     argparse_describe(&argparse, NULL, info_footer);
     argc = argparse_parse(&argparse, argc, argv);
-
+    
     if (test != 0) {
         return ARG_VERSION;
     }

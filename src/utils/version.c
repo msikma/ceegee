@@ -3,6 +3,8 @@
  * MIT License
  */
 
+#include <stdio.h>
+
 #include "src/utils/version.h"
 
 /**
@@ -11,4 +13,11 @@
  */
 const char * get_version() {
     return CEEGEE_VERSION;
+}
+
+/**
+ * Prints the version.
+ */
+void print_version() {
+    printf("%s", get_version());
 }
