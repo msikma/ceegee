@@ -3,7 +3,7 @@
  * MIT License
  */
 
-#include "version.h"
+#include "src/utils/version.h"
 
 /**
  * Returns the version of the program. The CEEGEE_VERSION macro

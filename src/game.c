@@ -6,9 +6,9 @@
 #include <allegro.h>
 #include <stdio.h>
 
-#include "game.h"
-#include "midi.h"
-#include "logos.h"
+#include "src/audio/midi.h"
+#include "src/game.h"
+#include "src/gfx/logos.h"
 
 // Whether Allegro is initialized.
 int ALLEGRO_INITIALIZED = 0;
@@ -33,7 +33,7 @@ int start_game() {
     }
 
     // Play music, display logos and then shut down.
-    music_start("data\\music\\wit2.mid");
+    music_start(MUSIC_LOGOS);
     show_startup_logos();
     music_stop();
     shutdown();

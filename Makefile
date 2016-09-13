@@ -3,7 +3,7 @@
 
 CC        = $(DJGPP_CC)
 VENDOR    = vendor
-CFLAGS    = -DHAVE_STDBOOL_H=1 -fgnu89-inline -Ivendor/allegro-4.2.2-xc/include -Ivendor/argparse -Ivendor/xorshift
+CFLAGS    = -DHAVE_STDBOOL_H=1 -fgnu89-inline -Ivendor/allegro-4.2.2-xc/include -Ivendor/argparse -Ivendor/xorshift -I.
 LDFLAGS   = -Lvendor/allegro-4.2.2-xc/lib/djgpp -lalleg
 
 TITLE     = CeeGee Engine
@@ -46,7 +46,7 @@ ${DISTDIR}:
 	${CC} -c -o $@ $? ${CFLAGS}
 
 # Pass on the version string to the version.c file.
-src/version.o: src/version.c
+src/utils/version.o: src/utils/version.c
 	${CC} -c -o $@ $? ${CFLAGS} ${VDEF}
 
 ${DISTDIR}/${BIN}: ${OBJS}

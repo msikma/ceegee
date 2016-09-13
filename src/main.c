@@ -5,10 +5,10 @@
 
 #include <stdio.h>
 
-#include "utils/args.h"
-#include "game.h"
-#include "midi.h"
-#include "version.h"
+#include "src/audio/midi.h"
+#include "src/game.h"
+#include "src/utils/args.h"
+#include "src/utils/version.h"
 
 /**
  * Main entrance point of the application.

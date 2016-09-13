@@ -6,7 +6,7 @@
 #include <allegro.h>
 #include <stdio.h>
 
-#include "logos.h"
+#include "src/gfx/logos.h"
 
 // List of the logos we display on launch.
 const char *LOGOS[] = {

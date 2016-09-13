@@ -7,7 +7,7 @@
 #include <string.h>
 #include <argparse.h>
 
-#include "args.h"
+#include "src/utils/args.h"
 
 /**
  * Retrieves the current filename. In DOS, argv[0] contains a path.

@@ -6,10 +6,13 @@
 #include <allegro.h>
 #include <stdio.h>
 
-#include "midi.h"
-#include "game.h"
+#include "src/audio/midi.h"
+#include "src/game.h"
 
-MIDI *the_music;
+// Displayed alongside the logos when starting the game.
+char MUSIC_LOGOS[] = "data\\music\\wit2.mid";
+
+MIDI *curr_music;
 
 /**
  * Initializes a midi file and begins playback.
@@ -26,14 +29,14 @@ int music_start(char *name) {
         return ERROR_INIT_SOUND;
     }
 
-    the_music = load_midi(name);
-    if (!the_music) {
+    curr_music = load_midi(name);
+    if (!curr_music) {
         // Cannot load midi file.
         return ERROR_LOADING_MUSIC;
     }
-    length = get_midi_length(the_music);
+    length = get_midi_length(curr_music);
 
-    play_midi(the_music, TRUE);
+    play_midi(curr_music, TRUE);
 
     return 0;
 }
@@ -42,6 +45,6 @@ int music_start(char *name) {
  * Stops midi playback and removes the file from memory.
  */
 int music_stop() {
-    destroy_midi(the_music);
+    destroy_midi(curr_music);
     return 0;
 }

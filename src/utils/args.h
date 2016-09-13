@@ -10,8 +10,8 @@
 #define ARG_VERSION 2
 #define ARG_JUKEBOX 3
 
-static char *filename(char *path);
 int handle_args(int argc, const char **argv);
 int parse_args(int argc, const char **argv);
+static char *filename(char *path);
 
 #endif
