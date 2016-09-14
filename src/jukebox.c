@@ -5,8 +5,8 @@
 
 #include <stdio.h>
 
-#include "game.h"
-#include "jukebox.h"
+#include "src/game.h"
+#include "src/jukebox.h"
 
 /**
  * Starts the jukebox.
