@@ -3,78 +3,54 @@
  * MIT License
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
-#include <argparse.h>
+#include <unistd.h>
 
 #include "src/utils/args.h"
+#include "src/utils/version.h"
 
 /**
- * Retrieves the current filename. In DOS, argv[0] contains a path.
- * We strip out everything except the actual filename.
- * Currently unused. TODO: use this.
+ * Prints the program's usage information, MS-DOS style.
  */
-static char *filename(char *path)
-{
-    const char name[255];
-    const char delims[] = "/\\";
-    char *token, *last;
-
-    assert(path != NULL);
-    if (strlen(path) >= sizeof(name)) {
-        // Somehow the path was longer than MSDOS would normally permit.
-        return "main.exe";
-    }
-
-    while ((token = strsep(&path, delims)) != NULL) {
-        last = token;
-    }
-    return last;
-}
-
-int parse_args(int argc, const char **argv)
-{
-    // Help and description text.
-    static const char *const usage[] = {
-        "ceegee.exe [options] [[--] args]",
-        NULL,
-    };
-    char* info_footer = "\nInternet users find our latest software at:\nhttps://github.com/msikma/ceegee";
-
-    // The flags we'll check for.
-    int test = 0;
-    int juke = 0;
-
-    // Build the argparse object itself.
-    struct argparse argparse;
-    struct argparse_option options[] = {
-        OPT_GROUP("Basic options"),
-        OPT_HELP(),
-        OPT_BOOLEAN('v', "version", &test, "display version and exit"),
-        OPT_BOOLEAN('j', "jukebox", &juke, "play a song from the jukebox"),
-        OPT_END(),
-    };
-
-    argparse_init(&argparse, options, usage, 0);
-    argparse_describe(&argparse, NULL, info_footer);
-    argc = argparse_parse(&argparse, argc, argv);
-    
-    if (test != 0) {
-        return ARG_VERSION;
-    }
-    if (juke != 0) {
-        return ARG_JUKEBOX;
-    }
-    return ARG_NOTHING;
+void print_usage(char *name) {
+    printf("%s, %s\r\n", get_name(), get_copyright());
+    printf("\r\n");
+    printf("Usage: %s [options]\r\n", name);
+    printf("\r\n");
+    printf("  /h /?     Display usage information and exit.\r\n");
+    printf("  /v        Display version and exit.\r\n");
+    printf("  /j        Play a song from the jukebox.\r\n");
+    printf("\r\n");
+    printf("More information: %s\r\n", get_url());
 }
 
 /**
- * Handles the command line arguments.
+ * Parses command-line arguments and returns one of the ARG_* macros.
+ * MS-DOS style slash arguments are accepted. We're not using getopt()
+ * because it only seems to support dash arguments.
  */
-int handle_args(int argc, const char **argv)
-{
+int parse_args(int argc, char **argv) {
     if (argc <= 1) {
         return ARG_NOTHING;
     }
-    return parse_args(argc, argv);
+
+    // Skip over the program name.
+    for (int a = 1; a < argc; ++a) {
+        if (strcmp(argv[a], "/?") == 0) {
+            return ARG_USAGE;
+        }
+        if (strcmp(argv[a], "/h") == 0) {
+            return ARG_USAGE;
+        }
+        if (strcmp(argv[a], "/v") == 0) {
+            return ARG_VERSION;
+        }
+        if (strcmp(argv[a], "/j") == 0) {
+            return ARG_JUKEBOX;
+        }
+    }
+
+    return ARG_NOTHING;
 }
