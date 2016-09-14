@@ -28,7 +28,8 @@ void print_usage(char *name) {
 
 /**
  * Parses command-line arguments and returns one of the ARG_* macros.
- * MS-DOS style slash arguments are accepted.
+ * MS-DOS style slash arguments are accepted. We're not using getopt()
+ * because it only seems to support dash arguments.
  */
 int parse_args(int argc, char **argv) {
     if (argc <= 1) {
