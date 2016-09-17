@@ -10,7 +10,7 @@
 #include "src/game.h"
 
 // Whether the Allegro sound driver is initialized.
-int ALLEGRO_SOUND_INITIALIZED = 0;
+int ALLEGRO_SOUND_INITIALIZED = FALSE;
 
 // Displayed alongside the logos when starting the game.
 char MUSIC_LOGOS[] = "data\\music\\wit2.mid";
@@ -30,14 +30,14 @@ MIDI *curr_music;
  * Installs the Allegro sound driver.
  */
 int initialize_sound() {
-    if (ALLEGRO_SOUND_INITIALIZED == 1) {
+    if (ALLEGRO_SOUND_INITIALIZED == TRUE) {
         return 0;
     }
     if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) != 0) {
         // Cannot initialize sound system.
         return ERROR_INIT_SOUND;
     }
-    ALLEGRO_SOUND_INITIALIZED = 1;
+    ALLEGRO_SOUND_INITIALIZED = TRUE;
 }
 
 /**

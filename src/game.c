@@ -11,7 +11,7 @@
 #include "src/gfx/logos.h"
 
 // Whether Allegro is initialized.
-int ALLEGRO_INITIALIZED = 0;
+int ALLEGRO_INITIALIZED = FALSE;
 
 /**
  * Starts the game after the main program is executed.
@@ -42,7 +42,7 @@ int start_game() {
  * for any reason, 1 is returned, otherwise 0.
  */
 int initialize() {
-    if (ALLEGRO_INITIALIZED == 1) {
+    if (ALLEGRO_INITIALIZED == TRUE) {
         return 0;
     }
     if (allegro_init() != 0) {
@@ -53,7 +53,7 @@ int initialize() {
     install_timer();
     install_keyboard();
 
-    ALLEGRO_INITIALIZED = 1;
+    ALLEGRO_INITIALIZED = TRUE;
 
     return 0;
 }

@@ -6,10 +6,10 @@
 #include <allegro.h>
 
 DATAFILE *MONOREG;
-int MONOREG_LOADED = 0;
+int MONOREG_LOADED = FALSE;
 
 int load_monoreg() {
-    if (MONOREG_LOADED == 1) {
+    if (MONOREG_LOADED == TRUE) {
         return 0;
     }
     MONOREG = load_datafile("data\\font\\monoreg.dat");
@@ -20,6 +20,6 @@ int load_monoreg() {
         return 1;
     }
 
-    MONOREG_LOADED = 1;
+    MONOREG_LOADED = TRUE;
     return 0;
 }
