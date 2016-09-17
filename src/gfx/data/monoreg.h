@@ -12,3 +12,4 @@
 extern DATAFILE *MONOREG;
 
 int load_monoreg();
+int unload_monoreg();
