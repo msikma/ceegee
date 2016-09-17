@@ -10,6 +10,7 @@
 #define MONOREG_WHITE 3
 
 extern DATAFILE *MONOREG;
+extern int MONOREG_HEIGHT;
 
 int load_monoreg();
 int unload_monoreg();

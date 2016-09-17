@@ -6,7 +6,10 @@
 #include <allegro.h>
 #include <stdio.h>
 
+#include "monoreg.h"
+
 DATAFILE *MONOREG;
+int MONOREG_HEIGHT;
 int MONOREG_LOADED = FALSE;
 
 /**
@@ -23,6 +26,9 @@ int load_monoreg() {
         printf("Error loading the Monoreg font.");
         return 1;
     }
+
+    // Acquire the font height, slightly adjusted.
+    MONOREG_HEIGHT = text_height(MONOREG[MONOREG_COLOR].dat) - 4;
 
     MONOREG_LOADED = TRUE;
     return 0;

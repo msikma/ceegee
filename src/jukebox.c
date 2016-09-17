@@ -79,7 +79,7 @@ void initialize_jukebox() {
 
     // Prepare for the jukebox loop.
     set_palette(MONOREG[MONOREG_PALETTE].dat);
-    font_height = text_height(MONOREG[MONOREG_COLOR].dat);
+    font_height = MONOREG_HEIGHT;
 }
 
 /**
