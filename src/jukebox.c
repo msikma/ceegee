@@ -3,9 +3,11 @@
  * MIT License
  */
 
+#include <allegro.h>
 #include <stdio.h>
 
 #include "src/audio/midi.h"
+#include "src/gfx/data/monoreg.h"
 #include "src/game.h"
 #include "src/jukebox.h"
 
@@ -21,11 +23,7 @@ int UPDATE_FREQUENCY = 250;
 char HELP_EXIT[] = "Press ESC to exit";
 char HELP_ARROWS[] = "Use arrow keys to choose another song";
 
-// Text colors and background color.
-int song_color, help_color, background_color;
-// Height of our font in pixels.
 int font_height = 0;
-// Current track number.
 int track_n = 0;
 // Total length and number of beats (quarter notes) in the song.
 int length, beats;
@@ -36,12 +34,12 @@ int length, beats;
  */
 void draw_help() {
     textprintf_centre_ex(
-        screen, font, SCREEN_W / 2, SCREEN_H - (font_height * 5) -
-        (font_height / 2), help_color, -1, HELP_EXIT
+        screen, MONOREG[MONOREG_GRAY].dat, SCREEN_W / 2,
+        SCREEN_H - (font_height * 5) - (font_height / 2), -1, -1, HELP_EXIT
     );
     textprintf_centre_ex(
-        screen, font, SCREEN_W / 2, SCREEN_H - (font_height * 4) -
-        (font_height / 2), help_color, -1, HELP_ARROWS
+        screen, MONOREG[MONOREG_GRAY].dat, SCREEN_W / 2,
+        SCREEN_H - (font_height * 4) - (font_height / 2), -1, -1, HELP_ARROWS
     );
 }
 
@@ -51,8 +49,9 @@ void draw_help() {
  */
 void update_song_data() {
     textprintf_centre_ex(
-        screen, font, SCREEN_W / 2, SCREEN_H - (font_height * 3), song_color,
-        -1, "%d/%d: %s", track_n + 1, ALL_MUSIC_AMOUNT, CURR_TRACK
+        screen, MONOREG[MONOREG_COLOR].dat, SCREEN_W / 2,
+        SCREEN_H - (font_height * 3), -1, -1, "%d/%d: %s", track_n + 1,
+        ALL_MUSIC_AMOUNT, CURR_TRACK
     );
 }
 
@@ -61,9 +60,9 @@ void update_song_data() {
  */
 void update_track_data() {
     textprintf_centre_ex(
-        screen, font, SCREEN_W / 2, SCREEN_H - (font_height * 2), song_color,
-        background_color, "%d:%02d / %d:%02d", midi_time / 60, midi_time % 60,
-        length / 60, length % 60
+        screen, MONOREG[MONOREG_WHITE].dat, SCREEN_W / 2,
+        SCREEN_H - (font_height * 2), -1, -1, "%d:%02d/%d:%02d",
+        midi_time / 60, midi_time % 60, length / 60, length % 60
     );
 }
 
@@ -76,13 +75,11 @@ void initialize_jukebox() {
     initialize();
     screen_gfx_mode();
     initialize_sound();
+    load_monoreg();
 
     // Prepare for the jukebox loop.
-    set_palette(desktop_palette);
-    font_height = text_height(font);
-    song_color = makecol(255, 255, 255);
-    help_color = makecol(128, 128, 128);
-    background_color = makecol(0, 0, 0);
+    set_palette(MONOREG[MONOREG_PALETTE].dat);
+    font_height = text_height(MONOREG[MONOREG_COLOR].dat);
 }
 
 /**
@@ -137,7 +134,7 @@ int start_jukebox() {
         CURR_TRACK = ALL_MUSIC[track_n];
 
         // Prepare the screen.
-        clear_to_color(screen, background_color);
+        clear_to_color(screen, makecol(0, 0, 0));
         draw_help();
         update_song_data();
 
