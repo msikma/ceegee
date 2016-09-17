@@ -1,9 +1,6 @@
 # Contains my personal temporary files.
 _stuff/
 
-# Vendor files
-vendor/
-
 # Builds
 dist/
 
