@@ -1,7 +1,7 @@
 CeeGee
 ======
 
-Small C project that I'm working on to teach myself the language.
+Small C game that I'm working on to teach myself the language.
 This is designed for MS-DOS, meaning you need DJGPP to compile it.
 
 This project is still in the very early stages and doesn't work yet!
@@ -12,7 +12,7 @@ Installation
 
 ### Setting up DJGPP
 
-To compile the engine, you'll need to have DJGPP set up to be able to
+To compile the game, you'll need to have DJGPP set up to be able to
 compile for MS-DOS. You can either get a pre-built release or build
 the whole thing from source—follow the instructions on
 [andrewwutw/build-djgpp](https://github.com/andrewwutw/build-djgpp) to get
@@ -26,9 +26,8 @@ For example, you could add the following to your `~/.bashrc` file:
 
 ### Vendor code
 
-To download vendor-specific code, run the `vendor.sh` script. This will
-clone several Git repositories into the `vendor/` directory, which it will
-create if it doesn't exist.
+Vendor code is included as Git submodules. Clone this repo with
+`git clone --recursive` to make sure you get them.
 
 Only the Allegro library needs to be compiled separately. It's a fork
 from the 4.2.2 version with some tweaks to make it compile on modern systems.
@@ -40,14 +39,14 @@ All other vendor code is automatically compiled when you run `make`.
 ### Compiling the project
 
 After Allegro has been compiled, it should be as simple as running `make`.
-This creates a distribution in the `dist/` directory.
+This creates a distribution in the `dist/` directory. You can run this
+using [DOSBox](https://www.dosbox.com/) for testing.
 
 
 Dependencies
 ------------
 
 * [allegro-4.2.2-xc](https://github.com/msikma/allegro-4.2.2-xc)
-* [argparse](https://github.com/Cofyc/argparse)
 * [xorshift](https://github.com/msikma/xorshift)
 
 
