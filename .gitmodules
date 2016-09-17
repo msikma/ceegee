@@ -1,6 +1,8 @@
 [submodule "vendor/xorshift"]
 	path = vendor/xorshift
 	url = https://github.com/msikma/xorshift
+	ignore = dirty
 [submodule "vendor/allegro-4.2.2-xc"]
 	path = vendor/allegro-4.2.2-xc
 	url = https://github.com/msikma/allegro-4.2.2-xc
+	ignore = dirty
