@@ -25,12 +25,8 @@ int start_game() {
     // Install Allegro drivers.
     initialize();
 
-    // Try to change to graphics mode. If this is not possible, return 1.
-    if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
-        set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
-        printf("Cannot set graphics mode:\r\n%s\r\n", allegro_error);
-        return 1;
-    }
+    // Try to change to graphics mode.
+    screen_gfx_mode();
 
     // Play music, display logos and then shut down.
     music_start(MUSIC_LOGOS);
@@ -63,10 +59,33 @@ int initialize() {
 }
 
 /**
+ * Sets the standard graphics mode, which is 320x200@8bpp.
+ * Returns 1 if the mode can't be set for some reason, 0 otherwise.
+ */
+int screen_gfx_mode() {
+    set_color_depth(8);
+    if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
+        set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+        printf("Cannot set graphics mode:\r\n%s\r\n", allegro_error);
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * Returns us to text mode. Always expected to be possible, so it
+ * always returns 0.
+ */
+int screen_text_mode() {
+    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+    return 0;
+}
+
+/**
  * Returns to text mode and prints a thank you note.
  * Called just before program shutdown.
  */
 void shutdown() {
-    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+    screen_text_mode();
     printf("Thanks for playing Ceegee.\r\n");
 }

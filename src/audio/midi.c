@@ -9,10 +9,36 @@
 #include "src/audio/midi.h"
 #include "src/game.h"
 
+// Whether the Allegro sound driver is initialized.
+int ALLEGRO_SOUND_INITIALIZED = 0;
+
 // Displayed alongside the logos when starting the game.
 char MUSIC_LOGOS[] = "data\\music\\wit2.mid";
+// Test music.
+char MUSIC_RONDO[] = "data\\music\\rondo.mid";
+
+// Complete list of all music.
+char *ALL_MUSIC[] = {
+    MUSIC_LOGOS,
+    MUSIC_RONDO
+};
+int ALL_MUSIC_AMOUNT = sizeof(ALL_MUSIC) / sizeof(ALL_MUSIC[0]);
 
 MIDI *curr_music;
+
+/**
+ * Installs the Allegro sound driver.
+ */
+int initialize_sound() {
+    if (ALLEGRO_SOUND_INITIALIZED == 1) {
+        return 0;
+    }
+    if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) != 0) {
+        // Cannot initialize sound system.
+        return ERROR_INIT_SOUND;
+    }
+    ALLEGRO_SOUND_INITIALIZED = 1;
+}
 
 /**
  * Initializes a midi file and begins playback.
@@ -24,10 +50,7 @@ int music_start(char *name) {
     int length, pos;
     int done = 0;
 
-    if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) != 0) {
-        // Cannot initialize sound system.
-        return ERROR_INIT_SOUND;
-    }
+    initialize_sound();
 
     curr_music = load_midi(name);
     if (!curr_music) {

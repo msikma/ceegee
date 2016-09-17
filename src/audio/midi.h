@@ -12,6 +12,10 @@
 #define ERROR_LOADING_MUSIC 2
 
 extern char MUSIC_LOGOS[];
+extern char MUSIC_RONDO[];
+extern char *ALL_MUSIC[];
+extern int ALL_MUSIC_AMOUNT;
+int initialize_sound();
 int music_start();
 int music_stop();
 MIDI *the_music;
