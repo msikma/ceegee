@@ -13,15 +13,37 @@
 int ALLEGRO_SOUND_INITIALIZED = FALSE;
 
 // Displayed alongside the logos when starting the game.
-char MUSIC_LOGOS[] = "data\\music\\wit2.mid";
+struct song MUSIC_LOGOS = {
+    "What is this 2",
+    "data\\music\\wit2.mid",
+    "Chef Boyardee"
+};
 // Test music.
-char MUSIC_RONDO[] = "data\\music\\rondo.mid";
+struct song MUSIC_WINTER_SONG = {
+    "Winter Song",
+    "data\\music\\wtsong.mid",
+    "Chef Boyardee"
+};
+struct song MUSIC_WHOA = {
+    "Whoa",
+    "data\\music\\whoa.mid",
+    "Chef Boyardee"
+};
+struct song MUSIC_IHSWSB = {
+    "I_had_Sex_with_Sling_Blade",
+    "data\\music\\ihswsb.mid",
+    "Chef Boyardee"
+};
+
 
 // Complete list of all music.
-char *ALL_MUSIC[] = {
-    MUSIC_LOGOS,
-    MUSIC_RONDO
+struct song *ALL_MUSIC[] = {
+    &MUSIC_LOGOS,
+    &MUSIC_WINTER_SONG,
+    &MUSIC_WHOA,
+    &MUSIC_IHSWSB
 };
+
 int ALL_MUSIC_AMOUNT = sizeof(ALL_MUSIC) / sizeof(ALL_MUSIC[0]);
 
 MIDI *curr_music;
@@ -44,7 +66,7 @@ int initialize_sound() {
  * Initializes a midi file and begins playback.
  * Returns ERROR_INIT_SOUND or ERROR_LOADING_MUSIC on errors.
  */
-int music_start(char *name) {
+int music_start(struct song *reqsong) {
     initialize();
 
     int length, pos;
@@ -52,7 +74,7 @@ int music_start(char *name) {
 
     initialize_sound();
 
-    curr_music = load_midi(name);
+    curr_music = load_midi(reqsong->file);
     if (!curr_music) {
         // Cannot load midi file.
         return ERROR_LOADING_MUSIC;

@@ -29,7 +29,7 @@ int start_game() {
     screen_gfx_mode();
 
     // Play music, display logos and then shut down.
-    music_start(MUSIC_LOGOS);
+    music_start(&MUSIC_LOGOS);
     show_startup_logos();
     music_stop();
     shutdown();

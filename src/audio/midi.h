@@ -11,12 +11,19 @@
 #define ERROR_INIT_SOUND 1
 #define ERROR_LOADING_MUSIC 2
 
-extern char MUSIC_LOGOS[];
-extern char MUSIC_RONDO[];
-extern char *ALL_MUSIC[];
+struct song {
+    char name[63];
+    char file[127];
+    char author[63];
+};
+extern struct song MUSIC_LOGOS;
+extern struct song MUSIC_WINTER_SONG;
+extern struct song MUSIC_WHOA;
+extern struct song MUSIC_IHSWSB;
+extern struct song *ALL_MUSIC[];
 extern int ALL_MUSIC_AMOUNT;
 int initialize_sound();
-int music_start();
+int music_start(struct song *reqsong);
 int music_stop();
 MIDI *the_music;
 

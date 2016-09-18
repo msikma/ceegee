@@ -12,12 +12,12 @@
 #include "src/jukebox.h"
 
 // Track that's currently playing.
-char *CURR_TRACK;
+struct song *CURR_TRACK;
 
 // How long (in ms) to wait when changing to the next track.
 int TRACK_CHANGE_WAIT = 1000;
 // How long (in ms) between updates of the on-screen text.
-int UPDATE_FREQUENCY = 250;
+int UPDATE_FREQUENCY = 150;
 
 // Help text.
 char HELP_EXIT[] = "Press ESC to exit";
@@ -45,13 +45,12 @@ void draw_help() {
 
 /**
  * Updates the display to show what song is currently playing.
- * This function is called each time we switch to a new song.
  */
 void update_song_data() {
     textprintf_centre_ex(
         screen, MONOREG[MONOREG_COLOR].dat, SCREEN_W / 2,
         SCREEN_H - (font_height * 3), -1, -1, "%d/%d: %s", track_n + 1,
-        ALL_MUSIC_AMOUNT, CURR_TRACK
+        ALL_MUSIC_AMOUNT, CURR_TRACK->name
     );
 }
 
@@ -61,7 +60,7 @@ void update_song_data() {
 void update_track_data() {
     textprintf_centre_ex(
         screen, MONOREG[MONOREG_WHITE].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 2), -1, -1, "%d:%02d/%d:%02d",
+        SCREEN_H - (font_height * 2), -1, makecol(0, 0, 0), "%d:%02d/%d:%02d",
         midi_time / 60, midi_time % 60, length / 60, length % 60
     );
 }
@@ -104,6 +103,7 @@ int jukebox_loop() {
             }
         }
         update_track_data();
+        update_song_data();
         rest(UPDATE_FREQUENCY);
 
         // When we're at the end of the file, midi_pos will be set to
@@ -139,7 +139,7 @@ int start_jukebox() {
         update_song_data();
 
         // Load the next midi file.
-        curr_music = load_midi(CURR_TRACK);
+        curr_music = load_midi(CURR_TRACK->file);
         length = get_midi_length(curr_music);
         // After calling get_midi_length(), midi_pos will contain the negative
         // number of beats, and midi_time the length of the midi in seconds.
