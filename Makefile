@@ -35,7 +35,11 @@ VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPY
 
 # Check whether DJGPP is available.
 ifndef DJGPP_CC
-  $(error To compile, you'll need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc)
+  $(error To compile Ceegee, you'll need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc)
+endif
+# Check if Allegro has been compiled correctly.
+ifeq ("$(wildcard vendor/allegro-4.2.2-xc/lib/djgpp/liballeg.a)","")
+  $(error To compile Ceegee, you'll need to compile Allegro first. Check the instructions in the readme)
 endif
 
 .PHONY: clean version static
