@@ -26,7 +26,10 @@ int start_game() {
     initialize();
 
     // Try to change to graphics mode.
-    screen_gfx_mode();
+    if (screen_gfx_mode() != 0) {
+        printf("Cannot initialize Allegro:\r\n%s\r\n", allegro_error);
+        return 1;
+    }
 
     // Play music, display logos and then shut down.
     music_start(&MUSIC_LOGOS);
@@ -46,7 +49,6 @@ int initialize() {
         return 0;
     }
     if (allegro_init() != 0) {
-        printf("Cannot initialize Allegro:\r\n%s\r\n", allegro_error);
         return 1;
     }
 
