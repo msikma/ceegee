@@ -52,6 +52,7 @@ int initialize() {
 
     install_timer();
     install_keyboard();
+    set_color_conversion(COLORCONV_NONE);
 
     ALLEGRO_INITIALIZED = TRUE;
 

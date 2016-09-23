@@ -41,11 +41,9 @@ void fade_in_bitmap(char *file) {
     PALETTE pal;
 
     image = load_bitmap(file, pal);
-    // Fade out instantly before blitting to prevent one frame fade delay.
-    fade_out(64);
-    set_palette(pal);
+    set_palette(black_palette);
     blit(image, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-    fade_in(pal, 5);
+    fade_from(black_palette, pal, 5);
     destroy_bitmap(image);
 }
 
