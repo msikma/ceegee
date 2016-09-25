@@ -27,6 +27,9 @@ int STAR_Y_LIM = 200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1);
 int STAR_X_C = (320 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
 int STAR_Y_C = (200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
 
+// Speed at which the stars move, per vblank.
+int STAR_SPEED = 1;
+
 // Star definition. Contains a set of coordinates and a color value.
 typedef struct star {
    int x, y, z;
@@ -90,7 +93,7 @@ void draw_starfield(BITMAP *buffer) {
         }
         else {
             // move star
-            starfield[a].z -= 2;
+            starfield[a].z -= STAR_SPEED;
             if (starfield[a].z == 0) {
                 continue;
             }
