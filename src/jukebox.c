@@ -7,8 +7,9 @@
 #include <stdio.h>
 
 #include "src/audio/midi.h"
-#include "src/gfx/data/monoreg.h"
 #include "src/game.h"
+#include "src/gfx/data/flim.h"
+#include "src/gfx/starfield.h"
 #include "src/jukebox.h"
 
 // Track that's currently playing.
@@ -23,6 +24,9 @@ int UPDATE_FREQUENCY = 150;
 char HELP_EXIT[] = "Press ESC to exit";
 char HELP_ARROWS[] = "Use arrow keys to choose another song";
 
+// Buffer we'll draw to before blitting to the screen.
+BITMAP *buffer;
+
 int font_height = 0;
 int track_n = 0;
 // Total length and number of beats (quarter notes) in the song.
@@ -34,11 +38,11 @@ int length, beats;
  */
 void draw_help() {
     textprintf_centre_ex(
-        screen, MONOREG[MONOREG_GRAY].dat, SCREEN_W / 2,
+        buffer, FLIM[FLIM_GRAY].dat, SCREEN_W / 2,
         SCREEN_H - (font_height * 5) - (font_height / 2), -1, -1, HELP_EXIT
     );
     textprintf_centre_ex(
-        screen, MONOREG[MONOREG_GRAY].dat, SCREEN_W / 2,
+        buffer, FLIM[FLIM_GRAY].dat, SCREEN_W / 2,
         SCREEN_H - (font_height * 4) - (font_height / 2), -1, -1, HELP_ARROWS
     );
 }
@@ -48,7 +52,7 @@ void draw_help() {
  */
 void update_song_data() {
     textprintf_centre_ex(
-        screen, MONOREG[MONOREG_COLOR].dat, SCREEN_W / 2,
+        buffer, FLIM[FLIM_WHITE].dat, SCREEN_W / 2,
         SCREEN_H - (font_height * 3), -1, -1, "%d/%d: %s", track_n + 1,
         ALL_MUSIC_AMOUNT, CURR_TRACK->name
     );
@@ -59,8 +63,8 @@ void update_song_data() {
  */
 void update_track_data() {
     textprintf_centre_ex(
-        screen, MONOREG[MONOREG_WHITE].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 2), -1, makecol(0, 0, 0), "%d:%02d/%d:%02d",
+        buffer, FLIM[FLIM_WHITE].dat, SCREEN_W / 2,
+        SCREEN_H - (font_height * 2), -1, palette_color[0], "%d:%02d/%d:%02d",
         midi_time / 60, midi_time % 60, length / 60, length % 60
     );
 }
@@ -74,11 +78,16 @@ void initialize_jukebox() {
     initialize();
     screen_gfx_mode();
     initialize_sound();
-    load_monoreg();
+    load_flim();
 
     // Prepare for the jukebox loop.
-    set_palette(MONOREG[MONOREG_PALETTE].dat);
-    font_height = MONOREG_HEIGHT;
+    buffer = create_bitmap(SCREEN_W, SCREEN_H);
+    clear_bitmap(buffer);
+    RGB *pal = get_starfield_palette();
+    add_flim_palette_colors(pal);
+    set_palette(pal);
+    free(pal);
+    font_height = FLIM_HEIGHT;
 }
 
 /**
@@ -102,9 +111,12 @@ int jukebox_loop() {
                 return JUKEBOX_NEXT_SONG;
             }
         }
+        draw_starfield(buffer);
+        draw_help();
         update_track_data();
         update_song_data();
-        rest(UPDATE_FREQUENCY);
+        vsync();
+        blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
 
         // When we're at the end of the file, midi_pos will be set to
         // the negative number of beats in the song.
@@ -126,6 +138,7 @@ int jukebox_loop() {
 int start_jukebox() {
     // Set up everything needed to run the jukebox.
     initialize_jukebox();
+    initialize_starfield();
 
     MIDI *curr_music;
     int status;
@@ -134,9 +147,7 @@ int start_jukebox() {
         CURR_TRACK = ALL_MUSIC[track_n];
 
         // Prepare the screen.
-        clear_to_color(screen, makecol(0, 0, 0));
-        draw_help();
-        update_song_data();
+        clear_to_color(buffer, palette_color[0]);
 
         // Load the next midi file.
         curr_music = load_midi(CURR_TRACK->file);
