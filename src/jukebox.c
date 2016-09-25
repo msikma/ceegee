@@ -96,17 +96,17 @@ void initialize_jukebox() {
  * to trigger appropriate return codes.
  */
 int jukebox_loop() {
-    int key;
+    int key_p;
     while (TRUE) {
         while (keypressed()) {
-            key = readkey() >> 8;
-            if (key == KEY_ESC) {
+            key_p = readkey() >> 8;
+            if (key_p == KEY_ESC) {
                 return JUKEBOX_EXIT;
             }
-            if (key == KEY_LEFT) {
+            if (key_p == KEY_LEFT) {
                 return JUKEBOX_PREV_SONG;
             }
-            if (key == KEY_RIGHT) {
+            if (key_p == KEY_RIGHT) {
                 return JUKEBOX_NEXT_SONG;
             }
         }
