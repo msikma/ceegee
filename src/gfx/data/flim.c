@@ -18,7 +18,7 @@ int FLIM_LOADED = FALSE;
  */
 void add_flim_palette_colors(RGB *pal) {
     pal[254].r = pal[254].g = pal[254].b = 63;
-    pal[253].r = pal[253].g = pal[253].b = 24;
+    pal[253].r = pal[253].g = pal[253].b = 28;
     pal[252].r = pal[252].g = pal[252].b = 12;
 }
 
