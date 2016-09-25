@@ -79,8 +79,6 @@ void draw_starfield(BITMAP *buffer) {
     uint32_t seed_pos;
     uint32_t seed_col;
 
-    clear_to_color(buffer, 0);
-
     for (a = 0; a < NUM_STARS; ++a) {
         if (starfield[a].z < 1) {
             // reset star
@@ -118,33 +116,6 @@ void initialize_starfield() {
         starfield[a].z = 0;
     }
 }
-
-/**
- * Main loop for the stars. This contains the initialization,
- * the loop that moves and draws the stars, and finally the cleanup.
- * It responds to the ESC key, which cancels the program.
- */
-/*int loop_starfield(BITMAP *buffer) {
-    // Initialize the buffer and clear the screen.
-    clear_to_color(buffer, 15);
-    clear_bitmap(buffer);
-
-    init_starfield();
-
-    while (TRUE) {
-        draw_starfield();
-
-        vsync();
-        blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-
-        poll_keyboard();
-        if (key[KEY_ESC]) {
-            break;
-        }
-    }
-
-    destroy_bitmap(buffer);
-}*/
 
 /**
  * Returns the palette used for the starfield.

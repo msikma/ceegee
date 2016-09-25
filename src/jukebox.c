@@ -82,7 +82,6 @@ void initialize_jukebox() {
 
     // Prepare for the jukebox loop.
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
-    clear_bitmap(buffer);
     RGB *pal = get_starfield_palette();
     add_flim_palette_colors(pal);
     set_palette(pal);
@@ -111,6 +110,7 @@ int jukebox_loop() {
                 return JUKEBOX_NEXT_SONG;
             }
         }
+        clear_bitmap(buffer);
         draw_starfield(buffer);
         draw_help();
         update_track_data();
