@@ -32,8 +32,6 @@ int load_flim() {
     FLIM = load_datafile("data\\font\\flim.dat");
 
     if (!FLIM) {
-        set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
-        printf("Error loading the Flim font.");
         return 1;
     }
 
