@@ -10,7 +10,7 @@
 #define __CEEGEE_GFX_STARFIELD__
 
 int loop_starfield(BITMAP *buffer);
-int rand_star_color(uint32_t seed);
+int star_hue_color(int n);
 RGB *get_starfield_palette();
 void draw_star(BITMAP *buffer, int x, int y, int c);
 void draw_starfield(BITMAP *buffer);

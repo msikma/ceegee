@@ -12,7 +12,7 @@
 #include "src/gfx/starfield.h"
 
 // Number of visible stars.
-#define NUM_STARS 200
+#define NUM_STARS 700
 
 // Number of hue shades.
 int SHADES = 17;
@@ -33,7 +33,6 @@ int STAR_SPEED = 1;
 // Star definition. Contains a set of coordinates and a color value.
 typedef struct star {
    int x, y, z;
-   int c;
 } star;
 // The visible universe.
 star starfield[NUM_STARS];
@@ -61,10 +60,10 @@ void draw_star(BITMAP *buffer, int x, int y, int c) {
 }
 
 /**
- * Returns a random star color.
+ * Returns the proper first color color index for a shade of hue.
  */
-int rand_star_color(uint32_t seed) {
-    return SHADES_OFFSET + ((seed % (SHADES - 1)) * 3);
+int star_hue_color(int hue) {
+    return SHADES_OFFSET + (hue * 3);
 }
 
 /**
@@ -75,19 +74,17 @@ int rand_star_color(uint32_t seed) {
  * we reset the star to a starting position somewhere in the center.
  */
 void draw_starfield(BITMAP *buffer) {
-    int a, sx, sy;
+    int a, sx, sy, sc;
+    float hue;
     uint32_t seed_pos;
-    uint32_t seed_col;
 
     for (a = 0; a < NUM_STARS; ++a) {
         if (starfield[a].z < 1) {
             // reset star
             seed_pos = xor32();
-            seed_col = xor32();
-            starfield[a].x = (seed_pos % 32) - 16;
-            starfield[a].y = (seed_pos % 20) - 10;
+            starfield[a].x = (seed_pos % 96) - 48;
+            starfield[a].y = ((seed_pos >> 16) % 96) - 48;
             starfield[a].z = 128 + (seed_pos % 256);
-            starfield[a].c = rand_star_color(seed_col);
         }
         else {
             // move star
@@ -97,8 +94,11 @@ void draw_starfield(BITMAP *buffer) {
             }
             sx = ((starfield[a].x * STAR_X_LIM) / starfield[a].z + (STAR_X_C));
             sy = ((starfield[a].y * STAR_Y_LIM) / starfield[a].z + (STAR_Y_C));
+            hue = (starfield[a].z / 288.0);
+            hue = hue < 1.0 ? hue : 1.0;
+            sc = star_hue_color(hue * (SHADES - 1));
             if (sx > 0 && sx < STAR_X_LIM && sy > 0 && sy < STAR_Y_LIM) {
-                draw_star(buffer, sx, sy, starfield[a].c);
+                draw_star(buffer, sx, sy, sc);
             } else {
                 starfield[a].z = 0;
             }
