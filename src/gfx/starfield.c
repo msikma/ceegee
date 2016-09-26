@@ -80,14 +80,14 @@ void draw_starfield(BITMAP *buffer) {
 
     for (a = 0; a < NUM_STARS; ++a) {
         if (starfield[a].z < 1) {
-            // reset star
+            // Reset the star back to the starting position.
             seed_pos = xor32();
             starfield[a].x = (seed_pos % 96) - 48;
             starfield[a].y = ((seed_pos >> 16) % 96) - 48;
             starfield[a].z = 128 + (seed_pos % 256);
         }
         else {
-            // move star
+            // Move the star and redraw it.
             starfield[a].z -= STAR_SPEED;
             if (starfield[a].z == 0) {
                 continue;
