@@ -30,11 +30,24 @@ Vendor code is included as Git submodules. Clone this repo with
 `git clone --recursive` to make sure you get them.
 
 Only the Allegro library needs to be compiled separately. It's a fork
-from the 4.2.2 version with some tweaks to make it compile on modern systems.
-See the [allegro-4.2.2-xc](https://github.com/msikma/allegro-4.2.2-xc) page
-for instructions.
+from the 4.2.2 version with some tweaks to make it compile on modern
+cross-compilers. See the [allegro-4.2.2-xc](https://github.com/msikma/allegro-4.2.2-xc)
+page for instructions.
 
 All other vendor code is automatically compiled when you run `make`.
+
+### Allegro `dat` utility
+
+The `dat` utility from Allegro 4 is required to process graphical assets.
+We can't use the one from `allegro-4.2.2-xc` because that one is designed
+to compile for MS-DOS only—the `dat` utility must be usable by your system
+*natively*.
+
+Windows users can likely use [a binary](https://www.allegro.cc/files/?v=4.4)
+from the Allegro website. For Mac OS X, I've made a build that includes
+the `dat` utility, [available on this repository.](https://github.com/msikma/liballeg.4.4.2-osx)
+Just clone it and put its `tools` directory in your path, that should be
+sufficient.
 
 ### Compiling the project
 

@@ -33,13 +33,19 @@ COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d %T")
 VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATE} (${HASH})\r\n\""
 
-# Check whether DJGPP is available.
+# Check if a DJGPP compiler exists.
 ifndef DJGPP_CC
-  $(error To compile Ceegee, you'll need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc)
+  $(error To compile Ceegee, you need to set the DJGPP_CC environment variable to a DJGPP GCC binary, e.g. /usr/local/djgpp/bin/i586-pc-msdosdjgpp-gcc)
 endif
+
 # Check if Allegro has been compiled correctly.
 ifeq ("$(wildcard vendor/allegro-4.2.2-xc/lib/djgpp/liballeg.a)","")
-  $(error To compile Ceegee, you'll need to compile Allegro first. Check the instructions in the readme)
+  $(error To compile Ceegee, you need to compile Allegro first. Check the instructions in the readme)
+endif
+
+# Check if the dat utility is available.
+ifeq (, $(shell which dat))
+  $(error To compile Ceegee, the Allegro dat utility is required and must be on the path)
 endif
 
 .PHONY: clean version static
