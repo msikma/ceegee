@@ -6,35 +6,37 @@
 #include <allegro.h>
 #include <stdio.h>
 
-#include "src/gfx/logos.h"
-
-// List of the logos we display on launch.
-const char *LOGOS[] = {
-    "data\\gfx\\title\\aslogo.pcx",
-    "data\\gfx\\title\\test.pcx",
-    0
-};
+#include "src/gfx/bitmaps.h"
+#include "src/gfx/res/logos.h"
 
 /**
  * Shows the logos used during the startup sequence, e.g. publisher and title.
  */
 void show_startup_logos() {
-    show_logos(LOGOS);
-}
+    load_logos_dat();
 
-/**
- * Displays an array of a logos.
- */
-void show_logos(int *logos) {
-    for (int a = 0; logos[a] != 0; ++a) {
-        fade_in_bitmap(logos[a]);
+    for (int a = 0; a < 2; ++a) {
+        fade_in_data_bmp(
+            LOGOS[STARTUP_LOGO_BMP[a]].dat,
+            LOGOS[STARTUP_LOGO_PAL[a]].dat
+        );
         readkey();
         fade_out_bitmap();
     }
 }
 
 /**
- * Displays and fades in a single bitmap.
+ * Displays and fades in a bitmap from a datafile.
+ */
+void fade_in_data_bmp(BITMAP *image, RGB *pal) {
+    set_palette(black_palette);
+    blit(image, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+    fade_from(black_palette, pal, 5);
+    destroy_bitmap(image);
+}
+
+/**
+ * Displays and fades in a single bitmap by filename.
  */
 void fade_in_bitmap(char *file) {
     BITMAP *image;

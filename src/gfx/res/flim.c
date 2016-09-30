@@ -25,11 +25,11 @@ void add_flim_palette_colors(RGB *pal) {
 /**
  * Load the Flim font into memory.
  */
-int load_flim() {
+int load_flim_dat() {
     if (FLIM_LOADED == TRUE) {
         return 0;
     }
-    FLIM = load_datafile("data\\res\\font\\flim.dat");
+    FLIM = load_datafile(FLIM_PATH);
 
     if (!FLIM) {
         return 1;
@@ -46,6 +46,6 @@ int load_flim() {
  * Unload the Flim font. Unnecessary since it's used everywhere
  * in the game.
  */
-int unload_flim() {
+int unload_flim_dat() {
     unload_datafile(FLIM);
 }

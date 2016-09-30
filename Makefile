@@ -21,9 +21,9 @@ RESHDIR   = ${SRCDIR}/gfx/res/data
 # All resource files that are to be generated,
 # and all their corresponding header files.
 STATICRES= ${STATICDIR}/data/res
-RESDATS  = ${STATICRES}/font/flim.dat
+RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/logos.dat
 RESDDEST = $(subst ${STATICDIR},${DISTDIR},${RESDATS})
-RESHS    = ${RESHDIR}/flim_data.h
+RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/logos_data.h
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory. We're not including the ${STATICRES} directory
@@ -59,7 +59,7 @@ ifeq (, $(shell which dat))
   $(error To compile Ceegee, the Allegro dat utility is required and must be on the path)
 endif
 
-.PHONY: clean version static
+.PHONY: clean version static res
 default: all
 
 ${DISTDIR}:
@@ -86,6 +86,8 @@ all: ${DISTDIR} ${RESHDIR} ${RESHS} version ${DISTDIR}/${BIN} ${STATICDEST}
 
 static: ${STATICDEST}
 
+res: ${RESHS}
+
 clean:
 	rm -rf ${DISTDIR}
 	rm -f ${OBJS} ${RESHS} ${RESDATS}
@@ -93,8 +95,21 @@ clean:
 # From here on is a list of all resource files created by the dat utility.
 # All items here should also appear in the ${RESDATS} and ${RESHS} variables.
 
+${STATICRES}/logos.dat:
+	dat $@ -c1 -f -bpp 8 -t BMP -n1 -k -s0 -a ${RESDIR}/logos/aslogo.pcx ${RESDIR}/logos/test.pcx
+	dat $@ aslogo.pcx NAME=ASLOGO_IMG
+	dat $@ test.pcx NAME=TEST_IMG
+	dat $@ -c1 -f -bpp 8 -t PAL -n1 -k -s0 -a ${RESDIR}/logos/aslogo.pcx ${RESDIR}/logos/test.pcx
+	dat $@ aslogo.pcx NAME=ASLOGO_PALETTE
+	dat $@ test.pcx NAME=TEST_PALETTE
+
+${RESHDIR}/logos_data.h: ${STATICRES}/logos.dat
+	dat ${STATICRES}/logos.dat -h $@
+
 ${STATICRES}/font/flim.dat:
-	dat $@ -c2 -f -bpp 8 -t font -n1 -a ${RESDIR}/font/flim_w.pcx ${RESDIR}/font/flim_g.pcx -s0
+	dat $@ -c2 -f -bpp 8 -t font -n1 -k -s0 -a ${RESDIR}/font/flim_w.pcx ${RESDIR}/font/flim_g.pcx
+	dat $@ flim_w.pcx NAME=FLIM_WHITE
+	dat $@ flim_g.pcx NAME=FLIM_GRAY
 
 ${RESHDIR}/flim_data.h: ${STATICRES}/font/flim.dat
 	dat ${STATICRES}/font/flim.dat -h $@

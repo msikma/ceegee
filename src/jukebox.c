@@ -78,7 +78,7 @@ void initialize_jukebox() {
     initialize();
     screen_gfx_mode();
     initialize_sound();
-    load_flim();
+    load_flim_dat();
 
     // Prepare for the jukebox loop.
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
