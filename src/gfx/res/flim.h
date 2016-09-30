@@ -3,9 +3,10 @@
  * MIT License
  */
 
-// Datafile indices for flim.dat.
-#define FLIM_GRAY 0
-#define FLIM_WHITE 1
+#include "src/gfx/res/data/flim_data.h"
+
+#define FLIM_WHITE FLIM_W_PCX
+#define FLIM_GRAY FLIM_G_PCX
 
 extern DATAFILE *FLIM;
 extern int FLIM_HEIGHT;

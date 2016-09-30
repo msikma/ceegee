@@ -6,7 +6,7 @@
 #include <allegro.h>
 #include <stdio.h>
 
-#include "flim.h"
+#include "src/gfx/res/flim.h"
 
 DATAFILE *FLIM;
 int FLIM_HEIGHT;
