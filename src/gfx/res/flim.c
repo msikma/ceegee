@@ -29,7 +29,7 @@ int load_flim() {
     if (FLIM_LOADED == TRUE) {
         return 0;
     }
-    FLIM = load_datafile("data\\font\\flim.dat");
+    FLIM = load_datafile("data\\res\\font\\flim.dat");
 
     if (!FLIM) {
         return 1;

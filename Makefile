@@ -16,17 +16,18 @@ OBJDIR    = obj
 DISTDIR   = dist
 STATICDIR = static
 RESDIR    = resources
-RESHDIR   = src/gfx/res/data
+RESHDIR   = ${SRCDIR}/gfx/res/data
 
 # All resource files that are to be generated,
 # and all their corresponding header files.
-RESDATS  = ${STATICDIR}/data/font/flim.dat
+STATICRES= ${STATICDIR}/data/res
+RESDATS  = ${STATICRES}/font/flim.dat
 RESDDEST = $(subst ${STATICDIR},${DISTDIR},${RESDATS})
 RESHS    = ${RESHDIR}/flim_data.h
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory.
-STATIC    = $(shell find ${STATICDIR} -name "*.*" -not -name ".*" 2> /dev/null)
+STATIC    = $(shell find ${STATICDIR} -name "*.*" -not -name ".*" -type f ! -path ${STATICRES}?* 2> /dev/null)
 STATICDEST= $(subst ${STATICDIR},${DISTDIR},${STATIC}) ${RESDDEST}
 
 # All source files (*.c) and their corresponding object files.
@@ -62,6 +63,9 @@ default: all
 ${DISTDIR}:
 	mkdir -p ${DISTDIR}
 
+${RESHDIR}:
+	mkdir -p ${RESHDIR}
+
 %.o: %.c
 	${CC} -c -o $@ $? ${CFLAGS}
 
@@ -76,7 +80,7 @@ ${STATICDEST}: ${DISTDIR}
 	@mkdir -p $(shell dirname $@)
 	cp $(subst ${DISTDIR},${STATICDIR},$@) $@
 
-all: ${DISTDIR} ${RESHS} version ${DISTDIR}/${BIN} ${STATICDEST}
+all: ${DISTDIR} ${RESHDIR} ${RESHS} version ${DISTDIR}/${BIN} ${STATICDEST}
 
 static: ${STATICDEST}
 
@@ -87,8 +91,8 @@ clean:
 # From here on is a list of all resource files created by the dat utility.
 # All items here should also appear in the ${RESDATS} and ${RESHS} variables.
 
-${STATICDIR}/data/font/flim.dat:
+${STATICRES}/font/flim.dat:
 	dat $@ -c2 -f -bpp 8 -t font -n1 -a ${RESDIR}/font/flim_w.pcx ${RESDIR}/font/flim_g.pcx -s0
 
-${RESHDIR}/flim_data.h: ${STATICDIR}/data/font/flim.dat
-	dat ${STATICDIR}/data/font/flim.dat -h $@
+${RESHDIR}/flim_data.h: ${STATICRES}/font/flim.dat
+	dat ${STATICRES}/font/flim.dat -h $@
