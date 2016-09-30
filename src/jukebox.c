@@ -8,7 +8,7 @@
 
 #include "src/audio/midi.h"
 #include "src/game.h"
-#include "src/gfx/data/flim.h"
+#include "src/gfx/res/flim.h"
 #include "src/gfx/starfield.h"
 #include "src/jukebox.h"
 

@@ -4,6 +4,10 @@ _stuff/
 # Builds
 dist/
 
+# Generated files
+static/data/res
+src/gfx/res/data
+
 # Object files
 *.o
 *.ko
