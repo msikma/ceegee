@@ -26,7 +26,9 @@ RESDDEST = $(subst ${STATICDIR},${DISTDIR},${RESDATS})
 RESHS    = ${RESHDIR}/flim_data.h
 
 # Static files, e.g. the readme.txt file, that get copied straight to
-# the dist directory.
+# the dist directory. We're not including the ${STATICRES} directory
+# because those files are generated: so if they were already generated before,
+# we'd get a duplicate rule error. These files are appended to ${STATICDEST}.
 STATIC    = $(shell find ${STATICDIR} -name "*.*" -not -name ".*" -type f ! -path ${STATICRES}?* 2> /dev/null)
 STATICDEST= $(subst ${STATICDIR},${DISTDIR},${STATIC}) ${RESDDEST}
 
