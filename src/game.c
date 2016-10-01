@@ -89,6 +89,8 @@ int screen_text_mode() {
  * Called just before program shutdown.
  */
 void shutdown() {
+    set_palette(black_palette);
+    clear_bitmap(screen);
     screen_text_mode();
     printf("Thanks for playing Ceegee.\r\n");
 }
