@@ -3,14 +3,17 @@
  * MIT License
  */
 
-#include "src/gfx/res/data/flim_data.h"
+#ifndef __CEEGEE_GFX_RES_FLIM__
+#define __CEEGEE_GFX_RES_FLIM__
 
-#define FLIM_WHITE FLIM_W_PCX
-#define FLIM_GRAY FLIM_G_PCX
+#include "src/gfx/res/data/flim_data.h"
 
 extern DATAFILE *FLIM;
 extern int FLIM_HEIGHT;
 
-int load_flim();
-int unload_flim();
+int load_flim_dat();
+int unload_flim_dat();
+static char FLIM_PATH[] = "data\\res\\font\\flim.dat";
 void add_flim_palette_colors(RGB *pal);
+
+#endif

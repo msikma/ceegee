@@ -8,7 +8,7 @@
 
 #include "src/audio/midi.h"
 #include "src/game.h"
-#include "src/gfx/logos.h"
+#include "src/gfx/bitmaps.h"
 
 // Whether Allegro is initialized.
 int ALLEGRO_INITIALIZED = FALSE;
