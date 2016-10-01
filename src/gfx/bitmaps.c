@@ -16,7 +16,7 @@ void show_startup_logos() {
     load_logos_dat();
 
     for (int a = 0; a < 2; ++a) {
-        fade_in_data_bmp(
+        fade_in_bitmap(
             LOGOS[STARTUP_LOGO_BMP[a]].dat,
             LOGOS[STARTUP_LOGO_PAL[a]].dat
         );
@@ -28,7 +28,7 @@ void show_startup_logos() {
 /**
  * Displays and fades in a bitmap from a datafile.
  */
-void fade_in_data_bmp(BITMAP *image, RGB *pal) {
+void fade_in_bitmap(BITMAP *image, RGB *pal) {
     set_palette(black_palette);
     blit(image, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     fade_from(black_palette, pal, 5);
@@ -38,15 +38,12 @@ void fade_in_data_bmp(BITMAP *image, RGB *pal) {
 /**
  * Displays and fades in a single bitmap by filename.
  */
-void fade_in_bitmap(char *file) {
+void fade_in_bitmap_file(char *file) {
     BITMAP *image;
     PALETTE pal;
 
     image = load_bitmap(file, pal);
-    set_palette(black_palette);
-    blit(image, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-    fade_from(black_palette, pal, 5);
-    destroy_bitmap(image);
+    fade_in_bitmap(image, pal);
 }
 
 /**
