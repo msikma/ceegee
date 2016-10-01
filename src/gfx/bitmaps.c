@@ -17,6 +17,8 @@ void show_startup_logos() {
     load_logos_dat();
 
     for (int a = 0; a < STARTUP_LOGOS; ++a) {
+        // Fade in the bitmap, but don't unload it since we'll
+        // unload the whole datafile later.
         fade_in_bitmap(
             LOGOS[STARTUP_LOGO_BMP[a]].dat,
             LOGOS[STARTUP_LOGO_PAL[a]].dat,
@@ -37,6 +39,8 @@ void fade_in_bitmap(BITMAP *image, RGB *pal, bool unload) {
     blit(image, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     fade_from(black_palette, pal, 5);
 
+    // If desired, we'll unload the bitmap after using it.
+    // This is only done for images that don't come from a datafile.
     if (unload) {
         destroy_bitmap(image);
     }

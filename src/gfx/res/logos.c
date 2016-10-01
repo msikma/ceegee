@@ -10,6 +10,8 @@
 
 DATAFILE *LOGOS;
 int LOGOS_LOADED = FALSE;
+
+// Startup images and their associated palettes.
 int STARTUP_LOGO_BMP[] = {
     ASLOGO_IMG, TEST_IMG
 };
