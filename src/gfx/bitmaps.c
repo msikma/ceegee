@@ -4,6 +4,7 @@
  */
 
 #include <allegro.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "src/gfx/bitmaps.h"
@@ -18,21 +19,27 @@ void show_startup_logos() {
     for (int a = 0; a < 2; ++a) {
         fade_in_bitmap(
             LOGOS[STARTUP_LOGO_BMP[a]].dat,
-            LOGOS[STARTUP_LOGO_PAL[a]].dat
+            LOGOS[STARTUP_LOGO_PAL[a]].dat,
+            FALSE
         );
         readkey();
         fade_out_bitmap();
     }
+    
+    unload_logos_dat();
 }
 
 /**
  * Displays and fades in a bitmap from a datafile.
  */
-void fade_in_bitmap(BITMAP *image, RGB *pal) {
+void fade_in_bitmap(BITMAP *image, RGB *pal, bool unload) {
     set_palette(black_palette);
     blit(image, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     fade_from(black_palette, pal, 5);
-    destroy_bitmap(image);
+
+    if (unload) {
+        destroy_bitmap(image);
+    }
 }
 
 /**
@@ -43,7 +50,7 @@ void fade_in_bitmap_file(char *file) {
     PALETTE pal;
 
     image = load_bitmap(file, pal);
-    fade_in_bitmap(image, pal);
+    fade_in_bitmap(image, pal, TRUE);
 }
 
 /**
