@@ -16,7 +16,7 @@
 void show_startup_logos() {
     load_logos_dat();
 
-    for (int a = 0; a < 2; ++a) {
+    for (int a = 0; a < STARTUP_LOGOS; ++a) {
         fade_in_bitmap(
             LOGOS[STARTUP_LOGO_BMP[a]].dat,
             LOGOS[STARTUP_LOGO_PAL[a]].dat,
@@ -25,7 +25,7 @@ void show_startup_logos() {
         readkey();
         fade_out_bitmap();
     }
-    
+
     unload_logos_dat();
 }
 

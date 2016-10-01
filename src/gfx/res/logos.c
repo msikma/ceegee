@@ -16,6 +16,7 @@ int STARTUP_LOGO_BMP[] = {
 int STARTUP_LOGO_PAL[] = {
     ASLOGO_PALETTE, TEST_PALETTE
 };
+int STARTUP_LOGOS = sizeof(STARTUP_LOGO_BMP) / sizeof(int);
 
 /**
  * Load the logo images into memory.

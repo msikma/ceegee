@@ -11,6 +11,7 @@
 extern DATAFILE *LOGOS;
 extern int STARTUP_LOGO_BMP[];
 extern int STARTUP_LOGO_PAL[];
+extern int STARTUP_LOGOS;
 
 int load_logos_dat();
 int unload_logos_dat();
