@@ -94,8 +94,9 @@ void draw_starfield(BITMAP *buffer) {
             }
             sx = ((starfield[a].x * STAR_X_LIM) / starfield[a].z + (STAR_X_C));
             sy = ((starfield[a].y * STAR_Y_LIM) / starfield[a].z + (STAR_Y_C));
-            hue = (starfield[a].z / 288.0);
+            hue = (starfield[a].z / 288.0) - 0.1;
             hue = hue < 1.0 ? hue : 1.0;
+            hue = hue > 0.0 ? hue : 0.0;
             sc = star_hue_color(hue * (SHADES - 1));
             if (sx > 0 && sx < STAR_X_LIM && sy > 0 && sy < STAR_Y_LIM) {
                 draw_star(buffer, sx, sy, sc);
