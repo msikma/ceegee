@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <xorshift.h>
 
-#include "src/gfx/starfield.h"
+#include "src/gfx/starfield/algos.h"
+#include "src/gfx/starfield/starfield.h"
 
 // Number of visible stars.
 #define NUM_STARS 700
@@ -30,12 +31,25 @@ int STAR_Y_C = (200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
 // Speed at which the stars move, per vblank.
 int STAR_SPEED = 1;
 
+// Total duration of each rendering algorithm in ticks.
+int ALGO_TICKS = 360;
+
 // Star definition. Contains a set of coordinates and a color value.
+// x, y and z are used to determine a star's base position.
+// xpos, ypos are where they appear on screen after distance calculation.
+// c is the palette value the star will use when rendered.
 typedef struct star {
    int x, y, z;
+   int xpos, ypos, c;
 } star;
+
 // The visible universe.
 star starfield[NUM_STARS];
+
+// Counter used to determine rendering algorithm.
+int counter = 0;
+// Current rendering algorithm.
+int render_algo = 0;
 
 /**
  * Draws a single star at x and y, using the LUMINANCE_N colors from offset c.
@@ -67,55 +81,118 @@ int star_hue_color(int hue) {
 }
 
 /**
- * Determines and draws the positions and colors of the stars per frame.
+ * Updates the rendering algorithm counter.
+ */
+void update_starfield_counter() {
+    ++counter;
+}
+
+/**
+ * Updates the starfield; runs once per frame.
+ *
+ * This performs any update logic that needs to occur and then draws
+ * all stars.
+ */
+void update_starfield(BITMAP *buffer) {
+    set_star_pos_algo();
+    move_starfield();
+    draw_starfield(buffer);
+}
+
+/**
+ * Sets the correct star positioning algorithm for this frame.
+ *
+ * To render the stars, we use one of a number of algorithms to determine
+ * each individual star's initial x and y coordinates. We regularly switch
+ * algorithms to show different visual effects. This function sets the
+ * pointer to the algorithm function, switching once every ALGO_TICKS frames.
+ */
+void set_star_pos_algo() {
+    // Starting algorithm.
+    if (stars_algo_ptr == 0) {
+        stars_algo_ptr = ALGORITHMS[render_algo];
+    }
+
+    if (counter > ALGO_TICKS) {
+        // Counter is full, so go to the next algorithm and reset the counter.
+        counter = 0;
+        if (++render_algo >= ALGOS) {
+            render_algo = 0;
+        }
+        stars_algo_ptr = ALGORITHMS[render_algo];
+    }
+}
+
+/**
+ * Determines the positions and colors of the stars.
  *
  * Stars can be either in a visible or invisible state. If visible, we
  * determine the next set of coordinates and render the star. If invisible,
  * we reset the star to a starting position somewhere in the center.
  */
-void draw_starfield(BITMAP *buffer) {
+void move_starfield() {
     int a, sx, sy, sc;
     float hue;
-    uint32_t seed_pos;
 
     for (a = 0; a < NUM_STARS; ++a) {
         if (starfield[a].z < 1) {
             // Reset the star back to the starting position.
-            seed_pos = xor32();
-            starfield[a].x = (seed_pos % 96) - 48;
-            starfield[a].y = ((seed_pos >> 16) % 96) - 48;
-            starfield[a].z = 128 + (seed_pos % 256);
+            stars_algo_ptr(
+                &starfield[a].x, &starfield[a].y, &starfield[a].z,
+                counter, ALGO_TICKS
+            );
         }
         else {
-            // Move the star and redraw it.
+            // Move the star towards the viewer.
             starfield[a].z -= STAR_SPEED;
-            if (starfield[a].z == 0) {
+            if (starfield[a].z < 1) {
                 continue;
             }
             sx = ((starfield[a].x * STAR_X_LIM) / starfield[a].z + (STAR_X_C));
             sy = ((starfield[a].y * STAR_Y_LIM) / starfield[a].z + (STAR_Y_C));
+
+            // If the star is out of bounds, disable it.
+            if (sx <= 0 || sx > STAR_X_LIM || sy < 0 || sy >= STAR_Y_LIM) {
+                starfield[a].z = 0;
+                continue;
+            }
+
             hue = (starfield[a].z / 288.0) - 0.1;
             hue = hue < 1.0 ? hue : 1.0;
             hue = hue > 0.0 ? hue : 0.0;
             sc = star_hue_color(hue * (SHADES - 1));
-            if (sx > 0 && sx < STAR_X_LIM && sy > 0 && sy < STAR_Y_LIM) {
-                draw_star(buffer, sx, sy, sc);
-            } else {
-                starfield[a].z = 0;
-            }
+
+            starfield[a].xpos = sx;
+            starfield[a].ypos = sy;
+            starfield[a].c = sc;
         }
     }
 }
 
 /**
+ * Draws all currently visible stars onto the buffer.
+ */
+void draw_starfield(BITMAP *buffer) {
+    for (int a = 0; a < NUM_STARS; ++a) {
+        if (starfield[a].z < 1) {
+            continue;
+        }
+        draw_star(buffer, starfield[a].xpos, starfield[a].ypos, starfield[a].c);
+    }
+}
+
+/**
+ * Initialization routine.
+ *
  * Sets all stars to the starting position. Their initial coordinates
- * are determined in the main loop.
+ * are determined in the main loop. Also installs the algorithm timer.
  */
 void initialize_starfield() {
-    int a;
-    for (a = 0; a < NUM_STARS; ++a) {
+    for (int a = 0; a < NUM_STARS; ++a) {
         starfield[a].z = 0;
     }
+    // Install algorithm selection timer.
+    install_int_ex(update_starfield_counter, BPS_TO_TIMER(60));
 }
 
 /**
