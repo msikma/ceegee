@@ -13,7 +13,7 @@
 #include "src/gfx/starfield/starfield.h"
 
 // Number of visible stars.
-#define NUM_STARS 700
+#define NUM_STARS 600
 
 // Number of hue shades.
 int SHADES = 17;
@@ -97,6 +97,12 @@ void update_starfield(BITMAP *buffer) {
     set_star_pos_algo();
     move_starfield();
     draw_starfield(buffer);
+
+    // TODO: remove
+    float z = (float)counter / ALGO_TICKS;
+    textprintf_centre_ex(
+        buffer, font, SCREEN_W / 2, 0, -1, -1, "algo: %d/%d, ctr: %d, z: %f", render_algo, ALGOS, counter, z
+    );
 }
 
 /**
@@ -133,18 +139,23 @@ void set_star_pos_algo() {
 void move_starfield() {
     int a, sx, sy, sc;
     float hue;
+    float progress = (float)counter / ALGO_TICKS;
 
     for (a = 0; a < NUM_STARS; ++a) {
         if (starfield[a].z < 1) {
             // Reset the star back to the starting position.
             stars_algo_ptr(
                 &starfield[a].x, &starfield[a].y, &starfield[a].z,
-                counter, ALGO_TICKS
+                counter, ALGO_TICKS, progress
             );
         }
         else {
             // Move the star towards the viewer.
             starfield[a].z -= STAR_SPEED;
+            // Extra speed boost when they're close by.
+            if (starfield[a].z < 96) {
+                starfield[a].z -= STAR_SPEED;
+            }
             if (starfield[a].z < 1) {
                 continue;
             }
@@ -152,7 +163,7 @@ void move_starfield() {
             sy = ((starfield[a].y * STAR_Y_LIM) / starfield[a].z + (STAR_Y_C));
 
             // If the star is out of bounds, disable it.
-            if (sx <= 0 || sx > STAR_X_LIM || sy < 0 || sy >= STAR_Y_LIM) {
+            if (sx < 0 || sx > STAR_X_LIM || sy < 0 || sy > STAR_Y_LIM) {
                 starfield[a].z = 0;
                 continue;
             }

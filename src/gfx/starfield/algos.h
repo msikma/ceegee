@@ -6,11 +6,11 @@
 #ifndef __CEEGEE_GFX_STARFIELD_ALGOS__
 #define __CEEGEE_GFX_STARFIELD_ALGOS__
 
-extern int (*ALGORITHMS[])(int *x, int *y, int *z, int n, int m);
-extern int (*stars_algo_ptr)(int *x, int *y, int *z, int n, int m);
+extern int (*ALGORITHMS[])(int *x, int *y, int *z, int a, int b, float c);
+extern int (*stars_algo_ptr)(int *x, int *y, int *z, int a, int b, float c);
 extern int ALGOS;
-int stars_angled(int *x, int *y, int *z, int n, int m);
-int stars_narrow(int *x, int *y, int *z, int n, int m);
-int stars_random(int *x, int *y, int *z, int n, int m);
+int stars_angled(int *x, int *y, int *z, int a, int b, float c);
+int stars_narrow(int *x, int *y, int *z, int a, int b, float c);
+int stars_random(int *x, int *y, int *z, int a, int b, float c);
 
 #endif
