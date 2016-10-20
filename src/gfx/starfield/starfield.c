@@ -30,6 +30,8 @@ int STAR_Y_C = (200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
 
 // Speed at which the stars move, per vblank.
 int STAR_SPEED = 1;
+// Speeds up the stars closer by the user.
+int WARP_SPEED = 0;
 
 // Total duration of each rendering algorithm in ticks.
 int ALGO_TICKS = 360;
@@ -39,8 +41,8 @@ int ALGO_TICKS = 360;
 // xpos, ypos are where they appear on screen after distance calculation.
 // c is the palette value the star will use when rendered.
 typedef struct star {
-   int x, y, z;
-   int xpos, ypos, c;
+   float x, y;
+   int z, xpos, ypos, c;
 } star;
 
 // The visible universe.
@@ -153,7 +155,7 @@ void move_starfield() {
             // Move the star towards the viewer.
             starfield[a].z -= STAR_SPEED;
             // Extra speed boost when they're close by.
-            if (starfield[a].z < 96) {
+            if (WARP_SPEED && starfield[a].z < 96) {
                 starfield[a].z -= STAR_SPEED;
             }
             if (starfield[a].z < 1) {
