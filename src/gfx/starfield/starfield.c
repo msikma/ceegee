@@ -99,12 +99,6 @@ void update_starfield(BITMAP *buffer) {
     set_star_pos_algo();
     move_starfield();
     draw_starfield(buffer);
-
-    // TODO: remove
-    float z = (float)counter / ALGO_TICKS;
-    textprintf_centre_ex(
-        buffer, font, SCREEN_W / 2, 0, -1, -1, "algo: %d/%d, ctr: %d, z: %f", render_algo, ALGOS, counter, z
-    );
 }
 
 /**
