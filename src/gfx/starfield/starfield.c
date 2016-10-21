@@ -8,12 +8,10 @@
 #include <math.h>
 #include <stdio.h>
 #include <xorshift.h>
+#include <stdbool.h>
 
 #include "src/gfx/starfield/algos.h"
 #include "src/gfx/starfield/starfield.h"
-
-// Number of visible stars.
-#define NUM_STARS 600
 
 // Number of hue shades.
 int SHADES = 17;
@@ -28,25 +26,36 @@ int STAR_Y_LIM = 200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1);
 int STAR_X_C = (320 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
 int STAR_Y_C = (200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
 
+// Star definition. Contains a set of coordinates and a color value.
+// x, y and z are used to determine a star's base position.
+// n is a number from 0 to STAR_MULTIPLIER.
+// xpos, ypos are where they appear on screen after distance calculation.
+// c is the palette value the star will use when rendered.
+// vis determines whether the star is visible or not.
+typedef struct star {
+   float x, y;
+   int z, n, xpos, ypos, c;
+   bool vis;
+} star;
+
+// Number of visible stars. Must be a multiple of STAR_MAX_DIST.
+const int STAR_AMOUNT = 1152;
+// Must be STAR_AMOUNT / STAR_MAX_DIST.
+int STAR_MULTIPLIER = 8;
+// The maximum distance (the point where the last color shade is shown).
+int STAR_MAX_DIST = 144;
+// The visible universe.
+star starfield[1152];
+
 // Speed at which the stars move, per vblank.
 int STAR_SPEED = 1;
-// Speeds up the stars closer by the user.
-int WARP_SPEED = 0;
+// Speeds up the stars closer by the user. Turn off when making new algorithms.
+int WARP_SPEED = TRUE;
+// Whether the starfield has been initialized.
+bool INITIALIZED = FALSE;
 
 // Total duration of each rendering algorithm in ticks.
 int ALGO_TICKS = 360;
-
-// Star definition. Contains a set of coordinates and a color value.
-// x, y and z are used to determine a star's base position.
-// xpos, ypos are where they appear on screen after distance calculation.
-// c is the palette value the star will use when rendered.
-typedef struct star {
-   float x, y;
-   int z, xpos, ypos, c;
-} star;
-
-// The visible universe.
-star starfield[NUM_STARS];
 
 // Counter used to determine rendering algorithm.
 int counter = 0;
@@ -126,6 +135,34 @@ void set_star_pos_algo() {
 }
 
 /**
+ * Sets the initial positions of each individual star.
+ * This function should only run once at the start.
+ */
+void initialize_star_positions() {
+    int a;
+    float progress = (float)counter / ALGO_TICKS;
+
+    if (INITIALIZED == TRUE) {
+        return;
+    }
+
+    // Run through all stars and set them to an initial position.
+    // The z position is especially important. It's set only once
+    // and is never changed, to ensure we have an even number
+    // of stars across the entire visible distance.
+    for (a = 0; a < STAR_AMOUNT; ++a) {
+        starfield[a].n = a / STAR_MAX_DIST;
+        starfield[a].z = (a % STAR_MAX_DIST) + 1;
+        starfield[a].vis = TRUE;
+        stars_algo_ptr(
+            &starfield[a].x, &starfield[a].y, &starfield[a].n,
+            counter, ALGO_TICKS, progress
+        );
+    }
+    INITIALIZED = TRUE;
+}
+
+/**
  * Determines the positions and colors of the stars.
  *
  * Stars can be either in a visible or invisible state. If visible, we
@@ -134,45 +171,46 @@ void set_star_pos_algo() {
  */
 void move_starfield() {
     int a, sx, sy, sc;
+    star *star;
     float hue;
     float progress = (float)counter / ALGO_TICKS;
 
-    for (a = 0; a < NUM_STARS; ++a) {
-        if (starfield[a].z < 1) {
-            // Reset the star back to the starting position.
+    for (a = 0; a < STAR_AMOUNT; ++a) {
+        star = &starfield[a];
+
+        // Move the star towards the viewer.
+        (*star).z -= STAR_SPEED;
+        // Extra speed boost when they're close by.
+        if (WARP_SPEED == TRUE && starfield[a].z < 96) {
+            (*star).z -= STAR_SPEED;
+        }
+
+        // Reset the star back to the starting position if it's too close.
+        if ((*star).z < 1) {
             stars_algo_ptr(
-                &starfield[a].x, &starfield[a].y, &starfield[a].z,
+                &(*star).x, &(*star).y, &(*star).n,
                 counter, ALGO_TICKS, progress
             );
+            (*star).z = STAR_MAX_DIST;
+            (*star).vis = TRUE;
         }
-        else {
-            // Move the star towards the viewer.
-            starfield[a].z -= STAR_SPEED;
-            // Extra speed boost when they're close by.
-            if (WARP_SPEED && starfield[a].z < 96) {
-                starfield[a].z -= STAR_SPEED;
-            }
-            if (starfield[a].z < 1) {
-                continue;
-            }
-            sx = ((starfield[a].x * STAR_X_LIM) / starfield[a].z + (STAR_X_C));
-            sy = ((starfield[a].y * STAR_Y_LIM) / starfield[a].z + (STAR_Y_C));
+        sx = (((*star).x * STAR_X_LIM) / ((*star).z - (*star).n) + (STAR_X_C));
+        sy = (((*star).y * STAR_Y_LIM) / ((*star).z - (*star).n) + (STAR_Y_C));
 
-            // If the star is out of bounds, disable it.
-            if (sx < 0 || sx > STAR_X_LIM || sy < 0 || sy > STAR_Y_LIM) {
-                starfield[a].z = 0;
-                continue;
-            }
-
-            hue = (starfield[a].z / 288.0) - 0.1;
-            hue = hue < 1.0 ? hue : 1.0;
-            hue = hue > 0.0 ? hue : 0.0;
-            sc = star_hue_color(hue * (SHADES - 1));
-
-            starfield[a].xpos = sx;
-            starfield[a].ypos = sy;
-            starfield[a].c = sc;
+        // If the star is out of bounds, don't draw it.
+        if (sx < 0 || sx > STAR_X_LIM || sy < 0 || sy > STAR_Y_LIM) {
+            (*star).vis = FALSE;
+            continue;
         }
+
+        hue = ((float)(*star).z / STAR_MAX_DIST) - 0.1;
+        hue = hue < 1.0 ? hue : 1.0;
+        hue = hue > 0.0 ? hue : 0.0;
+        sc = star_hue_color(ceil(hue * (SHADES - 1)));
+
+        (*star).xpos = sx;
+        (*star).ypos = sy;
+        (*star).c = sc;
     }
 }
 
@@ -180,8 +218,8 @@ void move_starfield() {
  * Draws all currently visible stars onto the buffer.
  */
 void draw_starfield(BITMAP *buffer) {
-    for (int a = 0; a < NUM_STARS; ++a) {
-        if (starfield[a].z < 1) {
+    for (int a = 0; a < STAR_AMOUNT; ++a) {
+        if (starfield[a].vis == FALSE) {
             continue;
         }
         draw_star(buffer, starfield[a].xpos, starfield[a].ypos, starfield[a].c);
@@ -195,11 +233,14 @@ void draw_starfield(BITMAP *buffer) {
  * are determined in the main loop. Also installs the algorithm timer.
  */
 void initialize_starfield() {
-    for (int a = 0; a < NUM_STARS; ++a) {
+    for (int a = 0; a < STAR_AMOUNT; ++a) {
         starfield[a].z = 0;
     }
     // Install algorithm selection timer.
     install_int_ex(update_starfield_counter, BPS_TO_TIMER(60));
+    // Set up the initial star positions.
+    set_star_pos_algo();
+    initialize_star_positions();
 }
 
 /**
