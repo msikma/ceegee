@@ -203,7 +203,9 @@ void move_starfield() {
             continue;
         }
 
-        hue = ((float)(*star).z / STAR_MAX_DIST) - 0.1;
+        // The hue selection contains some fine-tuning to ensure there's
+        // always a bit of red close by, and pink in the far distance.
+        hue = (((float)(*star).z - 50) / (STAR_MAX_DIST - 38));
         hue = hue < 1.0 ? hue : 1.0;
         hue = hue > 0.0 ? hue : 0.0;
         sc = star_hue_color(ceil(hue * (SHADES - 1)));
