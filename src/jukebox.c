@@ -10,15 +10,16 @@
 #include "src/game.h"
 #include "src/gfx/res/flim.h"
 #include "src/gfx/starfield/starfield.h"
+#include "src/gfx/text.h"
 #include "src/jukebox.h"
 
 // Track that's currently playing.
 struct song *CURR_TRACK;
 
 // How long (in ms) to wait when changing to the next track.
-int TRACK_CHANGE_WAIT = 1000;
+const int TRACK_CHANGE_WAIT = 1000;
 // How long (in ms) between updates of the on-screen text.
-int UPDATE_FREQUENCY = 150;
+const int UPDATE_FREQUENCY = 150;
 
 // Help text.
 char HELP_EXIT[] = "Press ESC to exit";
@@ -27,46 +28,45 @@ char HELP_ARROWS[] = "Use arrow keys to choose another song";
 // Buffer we'll draw to before blitting to the screen.
 BITMAP *buffer;
 
+// Help text drawing information.
 int font_height = 0;
-int track_n = 0;
+int help_text_x = 0;
+int help_text_y1 = 0;
+int help_text_y2 = 0;
+int help_text_y3 = 0;
+int help_text_y4 = 0;
+
 // Total length and number of beats (quarter notes) in the song.
 int length, beats;
+int track_n = 0;
 
 /**
  * Draws two lines of help text on the screen to show the user
  * how to use the jukebox.
  */
 void draw_help() {
-    textprintf_centre_ex(
-        buffer, FLIM[FLIM_GRAY].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 5) - (font_height / 2), -1, -1, HELP_EXIT
-    );
-    textprintf_centre_ex(
-        buffer, FLIM[FLIM_GRAY].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 4) - (font_height / 2), -1, -1, HELP_ARROWS
-    );
+    draw_text(buffer, help_text_x, help_text_y1, TXT_GRAY, -1, -1,
+        TXT_REGULAR, TXT_CENTER, HELP_EXIT);
+    draw_text(buffer, help_text_x, help_text_y2, TXT_GRAY, -1, -1,
+        TXT_REGULAR, TXT_CENTER, HELP_ARROWS);
 }
 
 /**
  * Updates the display to show what song is currently playing.
  */
 void update_song_data() {
-    textprintf_centre_ex(
-        buffer, FLIM[FLIM_WHITE].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 3), -1, -1, "%d/%d: %s", track_n + 1,
-        ALL_MUSIC_AMOUNT, CURR_TRACK->name
-    );
+    draw_textf(buffer, help_text_x, help_text_y3, TXT_WHITE, -1, -1,
+        TXT_REGULAR, TXT_CENTER, "%d/%d: %s", track_n + 1,
+        ALL_MUSIC_AMOUNT, CURR_TRACK->name);
 }
 
 /**
  * Draws the current time and duration of the song to the screen.
  */
 void update_track_data() {
-    textprintf_centre_ex(
-        buffer, FLIM[FLIM_WHITE].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 2), -1, palette_color[0], "%ld:%02ld/%d:%02d",
-        midi_time / 60, midi_time % 60, length / 60, length % 60
-    );
+    draw_textf(buffer, help_text_x, help_text_y4, TXT_WHITE, -1, -1,
+        TXT_REGULAR, TXT_CENTER, "%ld:%02ld/%d:%02d", midi_time / 60,
+        midi_time % 60, length / 60, length % 60);
 }
 
 /**
@@ -87,6 +87,11 @@ void initialize_jukebox() {
     set_palette(pal);
     free(pal);
     font_height = FLIM_HEIGHT;
+    help_text_x = SCREEN_W / 2;
+    help_text_y1 = SCREEN_H - (font_height * 5) - (font_height / 2);
+    help_text_y2 = SCREEN_H - (font_height * 4) - (font_height / 2);
+    help_text_y3 = SCREEN_H - (font_height * 3);
+    help_text_y4 = SCREEN_H - (font_height * 2);
 }
 
 /**
