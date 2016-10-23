@@ -64,7 +64,7 @@ void update_song_data() {
 void update_track_data() {
     textprintf_centre_ex(
         buffer, FLIM[FLIM_WHITE].dat, SCREEN_W / 2,
-        SCREEN_H - (font_height * 2), -1, palette_color[0], "%d:%02d/%d:%02d",
+        SCREEN_H - (font_height * 2), -1, palette_color[0], "%ld:%02ld/%d:%02d",
         midi_time / 60, midi_time % 60, length / 60, length % 60
     );
 }

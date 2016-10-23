@@ -10,10 +10,9 @@
 
 extern DATAFILE *FLIM;
 extern int FLIM_HEIGHT;
-
 int load_flim_dat();
-int unload_flim_dat();
 static char FLIM_PATH[] = "data\\res\\font\\flim.dat";
 void add_flim_palette_colors(RGB *pal);
+void unload_flim_dat();
 
 #endif

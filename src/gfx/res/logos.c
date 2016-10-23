@@ -40,7 +40,7 @@ int load_logos_dat() {
 /**
  * Unload the logo images.
  */
-int unload_logos_dat() {
+void unload_logos_dat() {
     unload_datafile(LOGOS);
     LOGOS_LOADED = FALSE;
 }

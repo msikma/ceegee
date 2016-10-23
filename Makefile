@@ -3,7 +3,7 @@
 
 CC        = ${DJGPP_CC}
 VENDOR    = vendor
-CFLAGS    = -DHAVE_STDBOOL_H=1 -DALLEGRO_HAVE_INTTYPES_H -fgnu89-inline -Ivendor/allegro-4.2.2-xc/include -Ivendor/xorshift -I.
+CFLAGS    = -DHAVE_STDBOOL_H=1 -DALLEGRO_HAVE_INTTYPES_H -fgnu89-inline -Wall -Wno-unused -O3 -mtune=i586 -ffast-math -fomit-frame-pointer -Ivendor/allegro-4.2.2-xc/include -Ivendor/xorshift -I.
 LDFLAGS   = -Lvendor/allegro-4.2.2-xc/lib/djgpp -lalleg
 
 TITLE     = CeeGee Engine

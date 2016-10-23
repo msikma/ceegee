@@ -139,7 +139,7 @@ void initialize_star_positions() {
     int a;
     float progress = (float)counter / COUNTER_MAX;
 
-    if (starfield_initialized == TRUE) {
+    if (starfield_initialized) {
         return;
     }
 

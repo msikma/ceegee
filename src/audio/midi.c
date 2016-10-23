@@ -60,6 +60,7 @@ int initialize_sound() {
         return ERROR_INIT_SOUND;
     }
     ALLEGRO_SOUND_INITIALIZED = TRUE;
+    return 0;
 }
 
 /**
