@@ -8,6 +8,7 @@
 #include <math.h>
 
 #include "src/gfx/starfield/algos.h"
+#include "src/utils/math.h"
 
 // List of algorithms.
 int (*ALGORITHMS[])(float *x, float *y, int *n, int a, int b, float c) = {
@@ -25,6 +26,8 @@ const int STARS_RANDOM_RADIUS_HALF = 32;
 const int STARS_CIRCLE_LOOPS = 8;
 const int STARS_CIRCLE_X_RADIUS = 24;
 const int STARS_CIRCLE_Y_RADIUS = 40;
+const int STARS_NET_X_RADIUS = 40;
+const int STARS_NET_Y_RADIUS = 40;
 const int STARS_ZIGZAG_RADIUS = 100;
 const int STARS_ZIGZAG_RADIUS_HALF = 50;
 
@@ -56,37 +59,45 @@ int stars_random_i(float *x, float *y, int *n, int a, int b, float c) {
 
 /**
  * Draws stars in a circle.
- * TODO: optimize using precomputed values.
  */
 int stars_circle(float *x, float *y, int *n, int a, int b, float c) {
-    float angle = (c - (0.11 * *n)) * STARS_CIRCLE_LOOPS * M_PI;
-    *x = STARS_CIRCLE_X_RADIUS * cos(angle);
-    *y = STARS_CIRCLE_Y_RADIUS * sin(angle);
+    int angle = deg_range((c - (0.11 * *n)) * STARS_CIRCLE_LOOPS * 180);
+    *x = STARS_CIRCLE_X_RADIUS * degcos(angle);
+    *y = STARS_CIRCLE_Y_RADIUS * degsin(angle);
 }
 
 /**
  * Draws several interlocking circles.
- * TODO: optimize using precomputed values.
  */
 int stars_circle_weird(float *x, float *y, int *n, int a, int b, float c) {
-    int pos = *n + 1;
+    int pos, deg;
+    float mod;
+
     // Pos is set to 9 if it's 4, because 0.25 * 4 = 1, which would
     // cause the position to always be calculated as the same.
-    if (pos == 4) pos = 9;
-    float angle = (c - ((0.25 * c) * (pos))) * STARS_CIRCLE_LOOPS * M_PI;
-    *x = STARS_CIRCLE_X_RADIUS * cos(angle);
-    *y = STARS_CIRCLE_Y_RADIUS * sin(angle);
+    pos = *n + 1;
+    pos = pos != 4 ? pos : 9;
+    mod = c - ((0.25 * c) * (pos));
+
+    deg = deg_range(mod * STARS_CIRCLE_LOOPS * 180);
+
+    *x = STARS_CIRCLE_X_RADIUS * degcos(deg);
+    *y = STARS_CIRCLE_Y_RADIUS * degsin(deg);
 }
 
 /**
  * Creates a net pattern.
- * TODO: optimize using precomputed values.
  */
 int stars_net(float *x, float *y, int *n, int a, int b, float c) {
-    int pos = *n + 1;
-    float angle = ((c * 2) - (0.14 * (pos))) * 2 * M_PI;
-    *x = 40 * cos(angle);
-    *y = (40 * sin(c * 2 * M_PI));
+    int pos, deg;
+    float mod, angle;
+
+    pos = *n + 1;
+    mod = (c * 2) - (0.14 * (pos));
+    deg = deg_range(mod * 2 * 180);
+
+    *x = STARS_NET_X_RADIUS * degcos(deg);
+    *y = STARS_NET_Y_RADIUS * degsin(c * 360);
 }
 
 /**

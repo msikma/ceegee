@@ -9,6 +9,11 @@
 #ifndef __CEEGEE_GFX_STARFIELD_STARFIELD__
 #define __CEEGEE_GFX_STARFIELD_STARFIELD__
 
+// Each visualization of the starfield is shown for this number
+// of counter ticks, then the next one begins.
+// Changing this will prevent some visualizations from working correctly.
+#define COUNTER_MAX 360
+
 int loop_starfield(BITMAP *buffer);
 int star_hue_color(int n);
 RGB *get_starfield_palette();

@@ -14,17 +14,18 @@
 #include "src/gfx/starfield/starfield.h"
 
 // Number of hue shades.
-int SHADES = 17;
+const int SHADES = 17;
 // Offset at which the color shades begin.
-int SHADES_OFFSET = 1;
-// Number of luminance variants.
-float LUMINANCES[] = { 1.0, 0.5, 0.25 };
-int LUMINANCE_N = sizeof(LUMINANCES) / sizeof(float);
+const int SHADES_OFFSET = 1;
+// Number of luminance variants per shade.
+const float LUMS[] = { 1.0, 0.5, 0.25 };
+const int LUM_N = sizeof(LUMS) / sizeof(float);
+
 // Maximum rendering coordinates, and centers, for our stars.
-int STAR_X_LIM = 320 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1);
-int STAR_Y_LIM = 200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1);
-int STAR_X_C = (320 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
-int STAR_Y_C = (200 - (((sizeof(LUMINANCES) / sizeof(float)) * 2) - 1)) / 2;
+const int STAR_X_LIM = 320 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1);
+const int STAR_Y_LIM = 200 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1);
+const int STAR_X_C = (320 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1)) / 2;
+const int STAR_Y_C = (200 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1)) / 2;
 
 // Star definition. Contains a set of coordinates and a color value.
 // x, y and z are used to determine a star's base position.
@@ -41,42 +42,38 @@ typedef struct star {
 // Number of visible stars. Must be a multiple of STAR_MAX_DIST.
 const int STAR_AMOUNT = 1152;
 // Must be STAR_AMOUNT / STAR_MAX_DIST.
-int STAR_MULTIPLIER = 8;
+const int STAR_MULTIPLIER = 8;
 // The maximum distance (the point where the last color shade is shown).
-int STAR_MAX_DIST = 144;
+const int STAR_MAX_DIST = 144;
+// Speed at which the stars move, per vblank.
+const int STAR_SPEED = 1;
+// Speeds up the stars closer by the user. Turn off when making new algorithms.
+const int STAR_WARP_SPEED = TRUE;
+
 // The visible universe.
 star starfield[1152];
-
-// Speed at which the stars move, per vblank.
-int STAR_SPEED = 1;
-// Speeds up the stars closer by the user. Turn off when making new algorithms.
-int WARP_SPEED = TRUE;
 // Whether the starfield has been initialized.
-bool INITIALIZED = FALSE;
-
-// Total duration of each rendering algorithm in ticks.
-int ALGO_TICKS = 360;
-
+bool starfield_initialized = FALSE;
 // Counter used to determine rendering algorithm.
 int counter = 0;
 // Current rendering algorithm.
 int render_algo = 0;
 
 /**
- * Draws a single star at x and y, using the LUMINANCE_N colors from offset c.
+ * Draws a single star at x and y, using the LUM_N colors from offset c.
  * The color offset must be the first of the set.
  *
  * Uses _putpixel(), so use with care. Don't call with invalid x/y values.
  */
 void draw_star(BITMAP *buffer, int x, int y, int c) {
     int a, b;
-    int center = LUMINANCE_N - 1;
+    int center = LUM_N - 1;
 
     // Center dot.
     _putpixel(buffer, center + x, center + y, palette_color[c]);
 
     // All other shades.
-    for (a = 1; a < LUMINANCE_N; ++a) {
+    for (a = 1; a < LUM_N; ++a) {
         _putpixel(buffer, center + x, center - a + y, palette_color[c + a]);
         _putpixel(buffer, center + x, center + a + y, palette_color[c + a]);
         _putpixel(buffer, center - a + x, center + y, palette_color[c + a]);
@@ -116,7 +113,7 @@ void update_starfield(BITMAP *buffer) {
  * To render the stars, we use one of a number of algorithms to determine
  * each individual star's initial x and y coordinates. We regularly switch
  * algorithms to show different visual effects. This function sets the
- * pointer to the algorithm function, switching once every ALGO_TICKS frames.
+ * pointer to the algorithm function, switching once every COUNTER_MAX frames.
  */
 void set_star_pos_algo() {
     // Starting algorithm.
@@ -124,7 +121,7 @@ void set_star_pos_algo() {
         stars_algo_ptr = ALGORITHMS[render_algo];
     }
 
-    if (counter > ALGO_TICKS) {
+    if (counter > COUNTER_MAX) {
         // Counter is full, so go to the next algorithm and reset the counter.
         counter = 0;
         if (++render_algo >= ALGOS) {
@@ -140,9 +137,9 @@ void set_star_pos_algo() {
  */
 void initialize_star_positions() {
     int a;
-    float progress = (float)counter / ALGO_TICKS;
+    float progress = (float)counter / COUNTER_MAX;
 
-    if (INITIALIZED == TRUE) {
+    if (starfield_initialized == TRUE) {
         return;
     }
 
@@ -156,10 +153,10 @@ void initialize_star_positions() {
         starfield[a].vis = TRUE;
         stars_algo_ptr(
             &starfield[a].x, &starfield[a].y, &starfield[a].n,
-            counter, ALGO_TICKS, progress
+            counter, COUNTER_MAX, progress
         );
     }
-    INITIALIZED = TRUE;
+    starfield_initialized = TRUE;
 }
 
 /**
@@ -173,7 +170,7 @@ void move_starfield() {
     int a, sx, sy, sc;
     star *star;
     float hue;
-    float progress = (float)counter / ALGO_TICKS;
+    float progress = (float)counter / COUNTER_MAX;
 
     for (a = 0; a < STAR_AMOUNT; ++a) {
         star = &starfield[a];
@@ -181,7 +178,7 @@ void move_starfield() {
         // Move the star towards the viewer.
         (*star).z -= STAR_SPEED;
         // Extra speed boost when they're close by.
-        if (WARP_SPEED == TRUE && starfield[a].z < 96) {
+        if (STAR_WARP_SPEED == TRUE && starfield[a].z < 96) {
             (*star).z -= STAR_SPEED;
         }
 
@@ -189,7 +186,7 @@ void move_starfield() {
         if ((*star).z < 1) {
             stars_algo_ptr(
                 &(*star).x, &(*star).y, &(*star).n,
-                counter, ALGO_TICKS, progress
+                counter, COUNTER_MAX, progress
             );
             (*star).z = STAR_MAX_DIST;
             (*star).vis = TRUE;
@@ -249,7 +246,7 @@ void initialize_starfield() {
  * Returns the palette used for the starfield.
  *
  * The colors are generated by picking SHADES number of hues
- * and adding LUMINANCE_N number of variants of that hue to the palette.
+ * and adding LUM_N number of variants of that hue to the palette.
  */
 RGB *get_starfield_palette() {
     int a, sha, lum, r, g, b, offset;
@@ -264,9 +261,9 @@ RGB *get_starfield_palette() {
 
     // Add several color swatches and their darker variants.
     for (sha = 0; sha < SHADES; ++sha) {
-        offset = (sha * LUMINANCE_N) + SHADES_OFFSET;
-        for (lum = 0; lum < LUMINANCE_N; ++lum) {
-            hsv_to_rgb((360 / SHADES) * sha, 1.0, LUMINANCES[lum], &r, &g, &b);
+        offset = (sha * LUM_N) + SHADES_OFFSET;
+        for (lum = 0; lum < LUM_N; ++lum) {
+            hsv_to_rgb((COUNTER_MAX / SHADES) * sha, 1, LUMS[lum], &r, &g, &b);
             pal[offset + lum].r = r / 4;
             pal[offset + lum].g = g / 4;
             pal[offset + lum].b = b / 4;
@@ -274,7 +271,7 @@ RGB *get_starfield_palette() {
     }
 
     // Fill the rest of the palette with white.
-    for (a = SHADES_OFFSET + (SHADES * LUMINANCE_N); a < PAL_SIZE; ++a) {
+    for (a = SHADES_OFFSET + (SHADES * LUM_N); a < PAL_SIZE; ++a) {
         pal[a].r = 63;
         pal[a].g = 63;
         pal[a].b = 63;
