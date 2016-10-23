@@ -118,8 +118,8 @@ void update_starfield(BITMAP *buffer) {
  */
 void set_star_pos_algo() {
     // Starting algorithm.
-    if (stars_algo_ptr == 0) {
-        stars_algo_ptr = ALGORITHMS[render_algo];
+    if (star_algo_ptr == 0) {
+        star_algo_ptr = ALGORITHMS[render_algo];
     }
 
     if (counter > COUNTER_MAX) {
@@ -128,7 +128,7 @@ void set_star_pos_algo() {
         if (++render_algo >= ALGOS) {
             render_algo = 0;
         }
-        stars_algo_ptr = ALGORITHMS[render_algo];
+        star_algo_ptr = ALGORITHMS[render_algo];
     }
 }
 
@@ -152,7 +152,7 @@ void initialize_star_positions() {
         starfield[a].n = a / STAR_MAX_DIST;
         starfield[a].z = (a % STAR_MAX_DIST) + 1;
         starfield[a].vis = TRUE;
-        stars_algo_ptr(
+        star_algo_ptr(
             &starfield[a].x, &starfield[a].y, &starfield[a].n,
             counter, COUNTER_MAX, progress
         );
@@ -185,7 +185,7 @@ void move_starfield() {
 
         // Reset the star back to the starting position if it's too close.
         if ((*star).z < 1) {
-            stars_algo_ptr(
+            star_algo_ptr(
                 &(*star).x, &(*star).y, &(*star).n,
                 counter, COUNTER_MAX, progress
             );

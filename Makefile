@@ -75,10 +75,6 @@ ${RESHDIR}:
 src/utils/version.o: src/utils/version.c
 	${CC} -c -o $@ $? ${CFLAGS} ${VDEF}
 
-# Ignore warnings about invalid return types from algos.c.
-src/gfx/starfield/algos.o: src/gfx/starfield/algos.c
-	${CC} -c -o $@ $? ${CFLAGS} -Wno-return-type
-
 ${DISTDIR}/${BIN}: ${OBJS}
 	${CC} -o ${DISTDIR}/${BIN} $+ ${LDFLAGS}
 
