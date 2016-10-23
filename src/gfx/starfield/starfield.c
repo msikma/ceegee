@@ -10,6 +10,7 @@
 #include <xorshift.h>
 #include <stdbool.h>
 
+#include "src/game.h"
 #include "src/gfx/starfield/algos.h"
 #include "src/gfx/starfield/starfield.h"
 
@@ -22,10 +23,10 @@ const float LUMS[] = { 1.0, 0.5, 0.25 };
 const int LUM_N = sizeof(LUMS) / sizeof(float);
 
 // Maximum rendering coordinates, and centers, for our stars.
-const int STAR_X_LIM = 320 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1);
-const int STAR_Y_LIM = 200 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1);
-const int STAR_X_C = (320 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1)) / 2;
-const int STAR_Y_C = (200 - (((sizeof(LUMS) / sizeof(float)) * 2) - 1)) / 2;
+const int STAR_X_LIM = CEEGEE_SCR_W - (((sizeof(LUMS) / sizeof(float)) * 2) - 1);
+const int STAR_Y_LIM = CEEGEE_SCR_H - (((sizeof(LUMS) / sizeof(float)) * 2) - 1);
+const int STAR_X_C = (CEEGEE_SCR_W - (((sizeof(LUMS) / sizeof(float)) * 2) - 1)) / 2;
+const int STAR_Y_C = (CEEGEE_SCR_H - (((sizeof(LUMS) / sizeof(float)) * 2) - 1)) / 2;
 
 // Star definition. Contains a set of coordinates and a color value.
 // x, y and z are used to determine a star's base position.

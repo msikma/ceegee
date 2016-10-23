@@ -67,7 +67,7 @@ int initialize() {
  */
 int screen_gfx_mode() {
     set_color_depth(8);
-    if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
+    if (set_gfx_mode(GFX_AUTODETECT, CEEGEE_SCR_W, CEEGEE_SCR_H, 0, 0) != 0) {
         set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
         printf("Cannot set graphics mode:\r\n%s\r\n", allegro_error);
         return 1;
