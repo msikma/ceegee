@@ -13,9 +13,11 @@
 #define TXT_GRAY -2
 #define TXT_REGULAR 5
 
+#define TXT_MAX_SIZE 512
+
 void draw_textf(BITMAP *buffer, int x, int y, int color_a, int color_b,
     int bg, int font, int align, const char *format, ...);
 void draw_text(BITMAP *buffer, int x, int y, int color_a, int color_b,
-    int bg, int font, int align, char txt[512]);
+    int bg, int font, int align, char txt[TXT_MAX_SIZE]);
 
 #endif

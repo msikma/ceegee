@@ -9,15 +9,13 @@
 #include "src/gfx/text.h"
 #include "src/gfx/res/flim.h"
 
-#define MAX_TEXT_SIZE 512
-
 /**
  * Draws text, with formatting.
  */
 void draw_textf(BITMAP *buffer, int x, int y, int color_a, int color_b,
     int bg, int font, int align, const char *format, ...)
 {
-    char txt[MAX_TEXT_SIZE];
+    char txt[TXT_MAX_SIZE];
     va_list ap;
 
     // String formatting.
@@ -33,7 +31,7 @@ void draw_textf(BITMAP *buffer, int x, int y, int color_a, int color_b,
  * TXT_WHITE
  */
 void draw_text(BITMAP *buffer, int x, int y, int color_a, int color_b,
-    int bg, int font, int align, char txt[MAX_TEXT_SIZE])
+    int bg, int font, int align, char txt[TXT_MAX_SIZE])
 {
     void (*txt_fn)() = 0;
 
