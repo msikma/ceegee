@@ -9,7 +9,7 @@
 #include "src/audio/midi.h"
 #include "src/game.h"
 #include "src/gfx/res/flim.h"
-#include "src/gfx/starfield.h"
+#include "src/gfx/starfield/starfield.h"
 #include "src/jukebox.h"
 
 // Track that's currently playing.
@@ -111,10 +111,10 @@ int jukebox_loop() {
             }
         }
         clear_bitmap(buffer);
-        draw_starfield(buffer);
-        draw_help();
+        update_starfield(buffer);
         update_track_data();
         update_song_data();
+        draw_help();
         vsync();
         blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
 
