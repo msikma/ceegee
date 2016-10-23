@@ -46,6 +46,6 @@ int load_flim_dat() {
  * Unload the Flim font. Unnecessary since it's used everywhere
  * in the game.
  */
-int unload_flim_dat() {
+void unload_flim_dat() {
     unload_datafile(FLIM);
 }

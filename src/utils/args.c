@@ -19,8 +19,8 @@ void print_usage(char *name) {
     printf("\r\n");
     printf("Usage: %s [options]\r\n", name);
     printf("\r\n");
-    printf("  /h /?     Display usage information and exit.\r\n");
-    printf("  /v        Display version and exit.\r\n");
+    printf("  /h /?     Display usage information.\r\n");
+    printf("  /v        Display version.\r\n");
     printf("  /j        Play a song from the jukebox.\r\n");
     printf("\r\n");
     printf("More information: %s\r\n", get_url());

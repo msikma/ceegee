@@ -11,14 +11,14 @@
 #include "src/utils/math.h"
 
 // List of algorithms.
-int (*ALGORITHMS[])(float *x, float *y, int *n, int a, int b, float c) = {
+void (*ALGORITHMS[])(float *x, float *y, int *n, int a, int b, float c) = {
     stars_random_f, stars_circle, stars_net, stars_circle_weird
 };
 // Total number of algorithms.
 int ALGOS = sizeof(ALGORITHMS) / sizeof(int);
 
 // Pointer to the repositioning algorithm currently in use.
-int (*stars_algo_ptr)(float *x, float *y, int *n, int a, int b, float c);
+void (*star_algo_ptr)(float *x, float *y, int *n, int a, int b, float c);
 
 // Hardcoded values for the algorithms.
 const int STARS_RANDOM_RADIUS = 64;
@@ -40,7 +40,7 @@ const int STARS_ZIGZAG_RADIUS_HALF = 50;
  * For example, if a = 0, this is the first frame that this algorithm
  * is in use. If a = 180 and b = 360, it's exactly the halfway point.
  */
-int stars_random_f(float *x, float *y, int *n, int a, int b, float c) {
+void stars_random_f(float *x, float *y, int *n, int a, int b, float c) {
     float seed_x = xor32f();
     float seed_y = xor32f();
     float seed_z = xor32f();
@@ -51,7 +51,7 @@ int stars_random_f(float *x, float *y, int *n, int a, int b, float c) {
 /**
  * Integer version of stars_random_f(). Currently unused.
  */
-int stars_random_i(float *x, float *y, int *n, int a, int b, float c) {
+void stars_random_i(float *x, float *y, int *n, int a, int b, float c) {
     uint32_t seed = xor32();
     *x = (float)(seed % STARS_RANDOM_RADIUS) - STARS_RANDOM_RADIUS_HALF;
     *y = (float)((seed >> 16) % STARS_RANDOM_RADIUS) - STARS_RANDOM_RADIUS_HALF;
@@ -60,7 +60,7 @@ int stars_random_i(float *x, float *y, int *n, int a, int b, float c) {
 /**
  * Draws stars in a circle.
  */
-int stars_circle(float *x, float *y, int *n, int a, int b, float c) {
+void stars_circle(float *x, float *y, int *n, int a, int b, float c) {
     int angle = deg_range((c - (0.11 * *n)) * STARS_CIRCLE_LOOPS * 180);
     *x = STARS_CIRCLE_X_RADIUS * degcos(angle);
     *y = STARS_CIRCLE_Y_RADIUS * degsin(angle);
@@ -69,7 +69,7 @@ int stars_circle(float *x, float *y, int *n, int a, int b, float c) {
 /**
  * Draws several interlocking circles.
  */
-int stars_circle_weird(float *x, float *y, int *n, int a, int b, float c) {
+void stars_circle_weird(float *x, float *y, int *n, int a, int b, float c) {
     int pos, deg;
     float mod;
 
@@ -88,7 +88,7 @@ int stars_circle_weird(float *x, float *y, int *n, int a, int b, float c) {
 /**
  * Creates a net pattern.
  */
-int stars_net(float *x, float *y, int *n, int a, int b, float c) {
+void stars_net(float *x, float *y, int *n, int a, int b, float c) {
     int pos, deg;
     float mod, angle;
 
@@ -112,7 +112,7 @@ int stars_net(float *x, float *y, int *n, int a, int b, float c) {
  *
  * Currently unused.
  */
-int stars_zigzag(float *x, float *y, int *n, int a, int b, float c) {
+void stars_zigzag(float *x, float *y, int *n, int a, int b, float c) {
     int half = a % 60;
     int whole = a % 120;
     float ypos = whole >= 60 ? ((60 - half) / 60.0) : (half / 60.0);
