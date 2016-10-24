@@ -12,7 +12,6 @@ URL       = https://github.com/msikma/ceegee
 
 BIN       = ceegee.exe
 SRCDIR    = src
-OBJDIR    = obj
 DISTDIR   = dist
 STATICDIR = static
 RESDIR    = resources
