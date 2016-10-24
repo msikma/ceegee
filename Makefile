@@ -58,7 +58,7 @@ ifeq (, $(shell which dat))
   $(error To compile Ceegee, the Allegro dat utility is required and must be on the path)
 endif
 
-.PHONY: clean version static res
+.PHONY: clean static res
 default: all
 
 ${DISTDIR}:
@@ -81,7 +81,7 @@ ${STATICDEST}: ${DISTDIR}
 	@mkdir -p $(shell dirname $@)
 	cp $(subst ${DISTDIR},${STATICDIR},$@) $@
 
-all: ${DISTDIR} ${RESHDIR} ${RESHS} version ${DISTDIR}/${BIN} ${STATICDEST}
+all: ${DISTDIR} ${RESHDIR} ${RESHS} ${DISTDIR}/${BIN} ${STATICDEST}
 
 static: ${STATICDEST}
 
