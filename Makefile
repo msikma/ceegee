@@ -1,6 +1,9 @@
 # Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>
 # MIT license
 
+# Ensure that Bash is used for Makefile recipes.
+SHELL     = /usr/bin/env bash
+
 CC        = ${DJGPP_CC}
 VENDOR    = vendor
 CFLAGS    = -DHAVE_STDBOOL_H=1 -DALLEGRO_HAVE_INTTYPES_H -fgnu89-inline -Wall -Wno-unused -O3 -mtune=i586 -ffast-math -fomit-frame-pointer -Ivendor/allegro-4.2.2-xc/include -Ivendor/xorshift -I.
@@ -12,7 +15,7 @@ URL       = https://github.com/msikma/ceegee
 
 BIN       = ceegee.exe
 SRCDIR    = src
-DISTDIR   = dist
+DISTDIR   = dist/ceegee
 STATICDIR = static
 RESDIR    = resources
 RESHDIR   = ${SRCDIR}/gfx/res/data
@@ -38,10 +41,20 @@ OBJS      = $(SRC:%.c=%.o)
 
 # Some information from Git that we'll use for the version indicator file.
 HASH      = $(shell git rev-parse --short HEAD | awk '{print toupper($0)}')
-BRANCH    = $(shell git describe --all | sed s@heads/@@ | awk "{print toupper($0)}")
+BRANCH_LC = $(shell git describe --all | sed s@heads/@@)
+BRANCH    = $(shell echo ${BRANCH_LC} | awk "{print toupper($0)}")
 COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d %T")
 VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATE} (${HASH})\r\n\""
+
+# When making a zip file, we don't want to include the dist/ directory.
+# Set additional variables here. The ZIPLOCAL file is used after we pushd
+# to dist/.
+DISTPUSHD = dist
+ZIPDIST   = dist/ceegee.zip
+ZIPLOCAL  = ceegee-${BRANCH_LC}-${COUNT}.zip
+ZIPFILES  = ceegee
+ZIPOPTS   = -r -9 -T -o -v
 
 # Check if a DJGPP compiler exists.
 ifndef DJGPP_CC
@@ -59,7 +72,7 @@ ifeq (, $(shell which dat))
 endif
 
 .PHONY: clean static res
-default: all
+default: game
 
 ${DISTDIR}:
 	mkdir -p ${DISTDIR}
@@ -81,7 +94,15 @@ ${STATICDEST}: ${DISTDIR}
 	@mkdir -p $(shell dirname $@)
 	cp $(subst ${DISTDIR},${STATICDIR},$@) $@
 
-all: ${DISTDIR} ${RESHDIR} ${RESHS} ${DISTDIR}/${BIN} ${STATICDEST}
+${ZIPDIST}: game
+	pushd ${DISTPUSHD}; \
+	zip ${ZIPOPTS} ${ZIPLOCAL} ${ZIPFILES};
+
+dist: ${ZIPDIST}
+
+all: game ${ZIPDIST}
+
+game: ${DISTDIR} ${RESHDIR} ${RESHS} ${DISTDIR}/${BIN} ${STATICDEST}
 
 static: ${STATICDEST}
 
