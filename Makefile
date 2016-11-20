@@ -54,7 +54,7 @@ DISTPUSHD = dist
 ZIPDIST   = dist/ceegee.zip
 ZIPLOCAL  = ceegee-${BRANCH_LC}-${COUNT}.zip
 ZIPFILES  = ceegee
-ZIPOPTS   = -r -9 -T -o -v
+ZIPOPTS   = -r -9 -T -o -v --DOS-names
 
 # Check if a DJGPP compiler exists.
 ifndef DJGPP_CC
