@@ -8,7 +8,7 @@
 
 #include "src/gfx/res/data/logos_data.h"
 
-extern DATAFILE *LOGOS;
+extern DATAFILE *LOGOS_DAT;
 extern int STARTUP_LOGO_BMP[];
 extern int STARTUP_LOGO_PAL[];
 extern int STARTUP_LOGOS;

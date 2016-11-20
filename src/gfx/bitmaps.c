@@ -20,8 +20,8 @@ void show_startup_logos() {
         // Fade in the bitmap, but don't unload it since we'll
         // unload the whole datafile later.
         fade_in_bitmap(
-            LOGOS[STARTUP_LOGO_BMP[a]].dat,
-            LOGOS[STARTUP_LOGO_PAL[a]].dat,
+            LOGOS_DAT[STARTUP_LOGO_BMP[a]].dat,
+            LOGOS_DAT[STARTUP_LOGO_PAL[a]].dat,
             FALSE
         );
         readkey();

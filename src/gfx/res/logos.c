@@ -8,7 +8,7 @@
 
 #include "src/gfx/res/logos.h"
 
-DATAFILE *LOGOS;
+DATAFILE *LOGOS_DAT;
 int LOGOS_LOADED = FALSE;
 
 // Startup images and their associated palettes.
@@ -27,9 +27,9 @@ int load_logos_dat() {
     if (LOGOS_LOADED == TRUE) {
         return 0;
     }
-    LOGOS = load_datafile(LOGOS_PATH);
+    LOGOS_DAT = load_datafile(LOGOS_PATH);
 
-    if (!LOGOS) {
+    if (!LOGOS_DAT) {
         return 1;
     }
 
@@ -41,6 +41,6 @@ int load_logos_dat() {
  * Unload the logo images.
  */
 void unload_logos_dat() {
-    unload_datafile(LOGOS);
+    unload_datafile(LOGOS_DAT);
     LOGOS_LOADED = FALSE;
 }

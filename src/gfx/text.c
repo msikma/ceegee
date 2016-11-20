@@ -74,8 +74,8 @@ void draw_text(BITMAP *buffer, int x, int y, int color_a, int color_b,
     // Finally, print the text using a custom setup for each font.
     switch (font) {
         case TXT_REGULAR:
-            txt_fn(buffer, FLIM[FLIM_WHITE].dat, txt, x, y, color_a, bg);
-            txt_fn(buffer, FLIM[FLIM_GRAY].dat, txt, x, y, color_b, bg);
+            txt_fn(buffer, FLIM_DAT[FLIM_WHITE].dat, txt, x, y, color_a, bg);
+            txt_fn(buffer, FLIM_DAT[FLIM_GRAY].dat, txt, x, y, color_b, bg);
             break;
     }
 }

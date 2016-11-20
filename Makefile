@@ -20,9 +20,9 @@ RESHDIR   = ${SRCDIR}/gfx/res/data
 # All resource files that are to be generated,
 # and all their corresponding header files.
 STATICRES= ${STATICDIR}/data/res
-RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/logos.dat
+RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/logos.dat ${STATICRES}/tstspr.dat
 RESDDEST = $(subst ${STATICDIR},${DISTDIR},${RESDATS})
-RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/logos_data.h
+RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/logos_data.h ${RESHDIR}/test_sprite_data.h
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory. We're not including the ${STATICRES} directory
@@ -93,6 +93,18 @@ clean:
 
 # From here on is a list of all resource files created by the dat utility.
 # All items here should also appear in the ${RESDATS} and ${RESHS} variables.
+#
+# A quick run-down of the common options we use:
+#
+#     -a        - adds an object to the datafile
+#     -bpp 8    - use 8-bit colors
+#     -c1       - compress individually (usually recommended)
+#     -c2       - compress globally
+#     -f        - store relative filename references instead of absolute
+#     -k        - keep original filename as reference (we then rename it)
+#     -n1       - sort alphabetically
+#     -s0       - don't strip any meta information from the file
+#     -t <TYPE> - treat as a particular object type (e.g. BMP, XCMP, FONT)
 
 ${STATICRES}/logos.dat:
 	dat $@ -c1 -f -bpp 8 -t BMP -n1 -k -s0 -a ${RESDIR}/logos/aslogo.pcx ${RESDIR}/logos/test.pcx
@@ -106,9 +118,16 @@ ${RESHDIR}/logos_data.h: ${STATICRES}/logos.dat
 	dat ${STATICRES}/logos.dat -h $@
 
 ${STATICRES}/font/flim.dat:
-	dat $@ -c2 -f -bpp 8 -t font -n1 -k -s0 -a ${RESDIR}/font/flim_w.pcx ${RESDIR}/font/flim_g.pcx
+	dat $@ -c2 -f -bpp 8 -t FONT -n1 -k -s0 -a ${RESDIR}/font/flim_w.pcx ${RESDIR}/font/flim_g.pcx
 	dat $@ flim_w.pcx NAME=FLIM_WHITE
 	dat $@ flim_g.pcx NAME=FLIM_GRAY
 
 ${RESHDIR}/flim_data.h: ${STATICRES}/font/flim.dat
 	dat ${STATICRES}/font/flim.dat -h $@
+
+${STATICRES}/tstspr.dat:
+	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/test_sprite.bmp
+	dat $@ test_sprite.bmp NAME=TEST_SPRITE
+
+${RESHDIR}/test_sprite_data.h: ${STATICRES}/tstspr.dat
+	dat ${STATICRES}/tstspr.dat -h $@

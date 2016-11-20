@@ -8,7 +8,7 @@
 
 #include "src/gfx/res/flim.h"
 
-DATAFILE *FLIM;
+DATAFILE *FLIM_DAT;
 int FLIM_HEIGHT;
 int FLIM_LOADED = FALSE;
 
@@ -29,14 +29,14 @@ int load_flim_dat() {
     if (FLIM_LOADED == TRUE) {
         return 0;
     }
-    FLIM = load_datafile(FLIM_PATH);
+    FLIM_DAT = load_datafile(FLIM_PATH);
 
-    if (!FLIM) {
+    if (!FLIM_DAT) {
         return 1;
     }
 
     // Acquire the font height, slightly adjusted.
-    FLIM_HEIGHT = text_height(FLIM[FLIM_WHITE].dat) - 4;
+    FLIM_HEIGHT = text_height(FLIM_DAT[FLIM_WHITE].dat) - 4;
 
     FLIM_LOADED = TRUE;
     return 0;
@@ -47,5 +47,5 @@ int load_flim_dat() {
  * in the game.
  */
 void unload_flim_dat() {
-    unload_datafile(FLIM);
+    unload_datafile(FLIM_DAT);
 }

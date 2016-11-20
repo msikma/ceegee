@@ -8,6 +8,7 @@
 
 #include "src/audio/midi.h"
 #include "src/game.h"
+#include "src/game/loop.h"
 #include "src/gfx/bitmaps.h"
 
 // Whether Allegro is initialized.
@@ -34,8 +35,7 @@ int start_game() {
     // Play music, display logos and then shut down.
     music_start(&MUSIC_LOGOS);
     show_startup_logos();
-    music_stop();
-    shutdown();
+    game_loop();
     return 0;
 }
 

@@ -8,7 +8,7 @@
 
 #include "src/gfx/res/data/flim_data.h"
 
-extern DATAFILE *FLIM;
+extern DATAFILE *FLIM_DAT;
 extern int FLIM_HEIGHT;
 int load_flim_dat();
 static char FLIM_PATH[] = "data\\res\\font\\flim.dat";
