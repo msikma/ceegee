@@ -24,8 +24,8 @@ void flying_init() {
     load_logos_dat();
     load_test_sprite_dat();
     set_palette(black_palette);
-    sx = 50;
-    sy = 50;
+    sx = 150;
+    sy = 80;
 }
 
 /**
