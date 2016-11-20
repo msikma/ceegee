@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "src/audio/midi.h"
+#include "src/gfx/modes.h"
 #include "src/game.h"
 #include "src/gfx/res/flim.h"
 #include "src/gfx/starfield/starfield.h"
@@ -75,7 +76,7 @@ void update_track_data() {
  */
 void initialize_jukebox() {
     // Switch to graphics mode.
-    initialize();
+    initialize_allegro();
     screen_gfx_mode();
     initialize_sound();
     load_flim_dat();

@@ -10,7 +10,7 @@
 #include <xorshift.h>
 #include <stdbool.h>
 
-#include "src/game.h"
+#include "src/gfx/modes.h"
 #include "src/gfx/starfield/algos.h"
 #include "src/gfx/starfield/starfield.h"
 

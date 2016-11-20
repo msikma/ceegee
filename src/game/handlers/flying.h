@@ -5,8 +5,8 @@
 
 #include <stdbool.h>
 
-#ifndef __CEEGEE_GAME_FLYING__
-#define __CEEGEE_GAME_FLYING__
+#ifndef __CEEGEE_GAME_HANDLERS_FLYING__
+#define __CEEGEE_GAME_HANDLERS_FLYING__
 
 void flying_init();
 void flying_update();

@@ -3,6 +3,8 @@
  * MIT License
  */
 
+#include <stdbool.h>
+
 #ifndef __CEEGEE_GAME_LOOP__
 #define __CEEGEE_GAME_LOOP__
 

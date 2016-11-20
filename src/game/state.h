@@ -10,6 +10,7 @@
 #define STATE_FLYING 2
 #define STATE_EXIT 3
 #define STATE_UNDETERMINED 4
+#define STATE_LOGOS 5
 
 int get_curr_state();
 int get_next_state();

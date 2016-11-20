@@ -7,30 +7,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "src/gfx/bitmaps.h"
-#include "src/gfx/res/logos.h"
-
-/**
- * Shows the logos used during the startup sequence, e.g. publisher and title.
- */
-void show_startup_logos() {
-    load_logos_dat();
-
-    for (int a = 0; a < STARTUP_LOGOS; ++a) {
-        // Fade in the bitmap, but don't unload it since we'll
-        // unload the whole datafile later.
-        fade_in_bitmap(
-            LOGOS_DAT[STARTUP_LOGO_BMP[a]].dat,
-            LOGOS_DAT[STARTUP_LOGO_PAL[a]].dat,
-            FALSE
-        );
-        readkey();
-        fade_out_bitmap();
-    }
-
-    unload_logos_dat();
-}
-
 /**
  * Displays and fades in a bitmap from a datafile.
  */

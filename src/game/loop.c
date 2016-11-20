@@ -8,8 +8,10 @@
 #include <stdio.h>
 
 #include "src/game.h"
+#include "src/game/handlers/flying.h"
+#include "src/game/handlers/initial.h"
+#include "src/game/handlers/logos.h"
 #include "src/game/state.h"
-#include "src/game/flying.h"
 
 // Whether the game loop will exit.
 bool game_loop_exit = FALSE;
@@ -28,8 +30,23 @@ void (*handler_exit_ptr)();
  */
 void set_handler() {
     switch (get_curr_state()) {
-        // TODO: initial state, when starting the game loop.
+        // Initial state: performs all tasks that are globally required
+        // for the game to function, and loads all basic resources.
         case STATE_INITIAL:
+            handler_init_ptr = initial_init;
+            handler_update_ptr = initial_update;
+            handler_render_ptr = initial_render;
+            handler_will_exit_ptr = initial_will_exit;
+            handler_exit_ptr = initial_exit;
+            break;
+        // Displays the logos at the start of the game.
+        case STATE_LOGOS:
+            handler_init_ptr = logos_init;
+            handler_update_ptr = logos_update;
+            handler_render_ptr = logos_render;
+            handler_will_exit_ptr = logos_will_exit;
+            handler_exit_ptr = logos_exit;
+            break;
         // When flying a spaceship in a level.
         case STATE_FLYING:
             handler_init_ptr = flying_init;
@@ -92,7 +109,8 @@ bool game_loop_will_exit() {
  */
 void game_loop() {
     while (!game_loop_exit) {
-        // Determine which handler to use.
+        // Determine which handler to use. This sets all variables
+        // ending in _ptr to the appropriate handler functions.
         set_handler();
 
         // Ask the handler to initialize itself.
@@ -100,6 +118,7 @@ void game_loop() {
 
         // Start the handler's own loop. Run update(), vsync() and render(),
         // until the handler asks to be terminated.
+        handler_exit = false;
         while (!handler_exit) {
             handler_update_ptr();
             vsync();

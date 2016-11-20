@@ -68,8 +68,6 @@ int initialize_sound() {
  * Returns ERROR_INIT_SOUND or ERROR_LOADING_MUSIC on errors.
  */
 int music_start(struct song *reqsong) {
-    initialize();
-
     int length, pos;
     int done = 0;
 
