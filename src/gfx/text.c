@@ -8,6 +8,7 @@
 
 #include "src/gfx/text.h"
 #include "src/gfx/res/flim.h"
+#include "src/gfx/res/tin.h"
 
 /**
  * Draws text onto a buffer, with string formatting. The formatted
@@ -76,6 +77,10 @@ void draw_text(BITMAP *buffer, int x, int y, int color_a, int color_b,
         case TXT_REGULAR:
             txt_fn(buffer, FLIM_DAT[FLIM_WHITE].dat, txt, x, y, color_a, bg);
             txt_fn(buffer, FLIM_DAT[FLIM_GRAY].dat, txt, x, y, color_b, bg);
+            break;
+        case TXT_SMALL:
+            txt_fn(buffer, TIN_DAT[TIN_WHITE].dat, txt, x, y, color_a, bg);
+            txt_fn(buffer, TIN_DAT[TIN_GRAY].dat, txt, x, y, color_b, bg);
             break;
     }
 }

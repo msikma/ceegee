@@ -16,6 +16,13 @@ const char *get_version() {
 }
 
 /**
+ * Returns the short version. See get_version().
+ */
+const char *get_short_version() {
+    return CEEGEE_SHORT_VERSION;
+}
+
+/**
  * Returns the name of the program. See get_version().
  */
 const char *get_name() {

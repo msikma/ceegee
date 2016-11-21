@@ -9,11 +9,24 @@ VENDOR    = vendor
 CFLAGS    = -DHAVE_STDBOOL_H=1 -DALLEGRO_HAVE_INTTYPES_H -fgnu89-inline -Wall -Wno-unused -O3 -mtune=i586 -ffast-math -fomit-frame-pointer -Ivendor/allegro-4.2.2-xc/include -Ivendor/xorshift -I.
 LDFLAGS   = -Lvendor/allegro-4.2.2-xc/lib/djgpp -lalleg
 
+# Enable debugging functionality if invoked with DEBUG=1.
+# We'll also suffix all object files with _debug, and rename the exe file,
+# to force the game to be recompiled completely if debugging is enabled.
+ifdef DEBUG
+	CFLAGS += -DDEBUG=1
+	OBJSFX  = _debug
+	EXENAME = cgdebug
+else
+	CFLAGS += -DDEBUG=0
+	OBJSFX  =
+	EXENAME = ceegee
+endif
+
 TITLE     = CeeGee Engine
 COPYRIGHT = (C) 2015-2016, Michiel Sikma (MIT license)
 URL       = https://github.com/msikma/ceegee
 
-BIN       = ceegee.exe
+BIN       = ${EXENAME}.exe
 SRCDIR    = src
 DISTDIR   = dist/ceegee
 STATICDIR = static
@@ -23,9 +36,9 @@ RESHDIR   = ${SRCDIR}/gfx/res/data
 # All resource files that are to be generated,
 # and all their corresponding header files.
 STATICRES= ${STATICDIR}/data/res
-RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/logos.dat ${STATICRES}/tstspr.dat
+RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/font/tin.dat ${STATICRES}/logos.dat ${STATICRES}/tstspr.dat
 RESDDEST = $(subst ${STATICDIR},${DISTDIR},${RESDATS})
-RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/logos_data.h ${RESHDIR}/test_sprite_data.h
+RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/tin_data.h ${RESHDIR}/logos_data.h ${RESHDIR}/test_sprite_data.h
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory. We're not including the ${STATICRES} directory
@@ -37,24 +50,33 @@ STATICDEST= $(subst ${STATICDIR},${DISTDIR},${STATIC}) ${RESDDEST}
 # All source files (*.c) and their corresponding object files.
 SRC       = $(shell find ${SRCDIR} -name "*.c" 2> /dev/null) \
             $(shell find ${VENDOR}/xorshift -name "*.c" -not -name "test_*.c" 2> /dev/null)
-OBJS      = $(SRC:%.c=%.o)
+OBJS      = $(SRC:%.c=%${OBJSFX}.o)
 
 # Some information from Git that we'll use for the version indicator file.
 HASH      = $(shell git rev-parse --short HEAD | awk '{print toupper($0)}')
 BRANCH_LC = $(shell git describe --all | sed s@heads/@@)
 BRANCH    = $(shell echo ${BRANCH_LC} | awk "{print toupper($0)}")
 COUNT     = $(shell git rev-list HEAD --count)
-DATE      = $(shell date +"%Y-%m-%d %T")
-VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATE} (${HASH})\r\n\""
+DATE      = $(shell date +"%Y-%m-%d")
+DATETIME  = $(shell date +"%Y-%m-%d %T")
+VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATETIME} (${HASH})\r\n\"" -DCEEGEE_SHORT_VERSION="\"${COUNT}-${BRANCH} ${DATE} (${HASH})\""
 
 # When making a zip file, we don't want to include the dist/ directory.
 # Set additional variables here. The ZIPLOCAL file is used after we pushd
 # to dist/.
 DISTPUSHD = dist
 ZIPDIST   = dist/ceegee.zip
-ZIPLOCAL  = ceegee-${BRANCH_LC}-${COUNT}.zip
 ZIPFILES  = ceegee
-ZIPOPTS   = -r -9 -T -o -v --DOS-names
+ZIPOPTS   = -r -9 -T -o -v
+
+# Include only the debugging exe by default, and vice versa.
+ifdef DEBUG
+	ZIPLOCAL = ceegee-${BRANCH_LC}-${COUNT}-debug.zip
+	ZIPEXCL = --exclude=*ceegee.exe*
+else
+	ZIPLOCAL = ceegee-${BRANCH_LC}-${COUNT}.zip
+	ZIPEXCL = --exclude=*cgdebug.exe*
+endif
 
 # Check if a DJGPP compiler exists.
 ifndef DJGPP_CC
@@ -80,11 +102,11 @@ ${DISTDIR}:
 ${RESHDIR}:
 	mkdir -p ${RESHDIR}
 
-%.o: %.c
+%${OBJSFX}.o: %.c
 	${CC} -c -o $@ $? ${CFLAGS}
 
 # Pass on the version string to the version.c file.
-src/utils/version.o: src/utils/version.c
+src/utils/version${OBJSFX}.o: src/utils/version.c
 	${CC} -c -o $@ $? ${CFLAGS} ${VDEF}
 
 ${DISTDIR}/${BIN}: ${OBJS}
@@ -96,7 +118,7 @@ ${STATICDEST}: ${DISTDIR}
 
 ${ZIPDIST}: game
 	pushd ${DISTPUSHD}; \
-	zip ${ZIPOPTS} ${ZIPLOCAL} ${ZIPFILES};
+	zip ${ZIPOPTS} ${ZIPLOCAL} ${ZIPFILES} ${ZIPEXCL};
 
 dist: ${ZIPDIST}
 
@@ -110,6 +132,7 @@ res: ${RESHS}
 
 clean:
 	rm -rf ${DISTDIR}
+	rm -f ${DISTPUSHD}/ceegee-*.zip
 	rm -f ${OBJS} ${RESHS} ${RESDATS}
 
 # From here on is a list of all resource files created by the dat utility.
@@ -145,6 +168,14 @@ ${STATICRES}/font/flim.dat:
 
 ${RESHDIR}/flim_data.h: ${STATICRES}/font/flim.dat
 	dat ${STATICRES}/font/flim.dat -h $@
+
+${STATICRES}/font/tin.dat:
+	dat $@ -c2 -f -bpp 8 -t FONT -n1 -k -s0 -a ${RESDIR}/font/tin_w.pcx ${RESDIR}/font/tin_g.pcx
+	dat $@ tin_w.pcx NAME=TIN_WHITE
+	dat $@ tin_g.pcx NAME=TIN_GRAY
+
+${RESHDIR}/tin_data.h: ${STATICRES}/font/tin.dat
+	dat ${STATICRES}/font/tin.dat -h $@
 
 ${STATICRES}/tstspr.dat:
 	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/test_sprite.bmp

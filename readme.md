@@ -53,7 +53,8 @@ sufficient.
 
 After Allegro has been compiled, it should be as simple as running `make`.
 This creates a distribution in the `dist/` directory. You can run this
-using [DOSBox](https://www.dosbox.com/) for testing.
+using [DOSBox](https://www.dosbox.com/) for testing. To enable debugging
+features, run `make DEBUG=1`.
 
 For easy distribution, run `make dist` to create a zip file containing
 the latest build. It will be saved to the `dist/` directory.

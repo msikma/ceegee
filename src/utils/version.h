@@ -8,6 +8,7 @@
 
 const char *get_copyright();
 const char *get_name();
+const char *get_short_version();
 const char *get_url();
 const char *get_version();
 void print_version();

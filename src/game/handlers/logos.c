@@ -10,8 +10,10 @@
 #include "src/game/state.h"
 #include "src/gfx/bitmaps.h"
 #include "src/gfx/res/flim.h"
+#include "src/gfx/res/tin.h"
 #include "src/gfx/res/logos.h"
 #include "src/gfx/text.h"
+#include "src/utils/version.h"
 
 // Fade speed. The speed goes from 1 (the slowest) up to 64 (instantaneous).
 const int FADE_SPEED = 5;
@@ -22,6 +24,7 @@ const int FADE_SPEED = 5;
 static void show_startup_logos() {
     load_logos_dat();
     load_flim_dat();
+    load_tin_dat();
 }
 
 /**
@@ -34,7 +37,7 @@ static void show_startup_logos() {
  */
 void logos_init() {
     // Play music, display logos and then shut down.
-    music_start(&MUSIC_LOGOS);
+    //music_start(&MUSIC_LOGOS);
     show_startup_logos();
 }
 
@@ -61,10 +64,14 @@ void logos_render(BITMAP *buffer) {
     // Display the main logo with text drawn on top.
     set_palette(black_palette);
     blit(LOGOS_DAT[ASLOGO_IMG].dat, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-    draw_text(screen, 160, 160, TXT_WHITE, -1, -1, TXT_REGULAR,
-        TXT_CENTER, "(C) 2016, Avalanche Studios");
-    draw_text(screen, 160, 160 + FLIM_HEIGHT, TXT_WHITE, -1, -1, TXT_REGULAR,
-        TXT_CENTER, "www.avalanchestudios.net");
+    draw_text(screen, 160, 154, TXT_WHITE, -1, -1,
+        TXT_REGULAR, TXT_CENTER, "(C) 2016, Avalanche Studios");
+    draw_text(screen, 160, 154 + FLIM_HEIGHT + 2, TXT_WHITE, -1, -1,
+        TXT_REGULAR, TXT_CENTER, "www.avalanchestudios.net");
+    if (DEBUG) {
+        draw_text(screen, 160, 154 + FLIM_HEIGHT + 18, TXT_GRAY, -1, -1,
+            TXT_SMALL, TXT_CENTER, (char *)get_short_version());
+    }
     fade_from(black_palette, LOGOS_DAT[ASLOGO_PALETTE].dat, FADE_SPEED);
 
     // Wait for any key, then draw the second logo.

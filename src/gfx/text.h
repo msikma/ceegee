@@ -12,6 +12,7 @@
 #define TXT_WHITE -1
 #define TXT_GRAY -2
 #define TXT_REGULAR 5
+#define TXT_SMALL 6
 
 #define TXT_MAX_SIZE 512
 
