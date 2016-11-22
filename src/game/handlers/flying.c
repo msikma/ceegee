@@ -10,8 +10,7 @@
 #include "src/game/state.h"
 
 //test
-#include "src/gfx/res/logos.h"
-#include "src/gfx/res/test_sprite.h"
+#include "src/gfx/res/usp_talon.h"
 #include "src/audio/midi.h"
 
 int sx;
@@ -21,8 +20,7 @@ int sy;
  * Initialize the flying handler.
  */
 void flying_init() {
-    load_logos_dat();
-    load_test_sprite_dat();
+    load_usp_talon_dat();
     set_palette(black_palette);
     sx = 150;
     sy = 80;
@@ -55,9 +53,9 @@ void flying_update() {
  * Renders the output of the flying handler's current game state.
  */
 void flying_render(BITMAP *buffer) {
-    blit(LOGOS_DAT[STARTUP_LOGO_BMP[0]].dat, buffer, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-    draw_compiled_sprite(buffer, TEST_SPRITE_DAT[TEST_SPRITE].dat, sx, sy);
-    set_palette(LOGOS_DAT[STARTUP_LOGO_PAL[0]].dat);
+    clear_to_color(buffer, palette_color[255]);
+    draw_compiled_sprite(buffer, USP_TALON_DAT[USP_TALON_M].dat, sx, sy);
+    set_palette(USP_TALON_DAT[USP_TALON_PALETTE].dat);
 }
 
 /**

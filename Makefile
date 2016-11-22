@@ -36,9 +36,9 @@ RESHDIR   = ${SRCDIR}/gfx/res/data
 # All resource files that are to be generated,
 # and all their corresponding header files.
 STATICRES= ${STATICDIR}/data/res
-RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/font/tin.dat ${STATICRES}/logos.dat ${STATICRES}/tstspr.dat
+RESDATS  = ${STATICRES}/font/flim.dat ${STATICRES}/font/tin.dat ${STATICRES}/logos.dat ${STATICRES}/usptalon.dat
 RESDDEST = $(subst ${STATICDIR},${DISTDIR},${RESDATS})
-RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/tin_data.h ${RESHDIR}/logos_data.h ${RESHDIR}/test_sprite_data.h
+RESHS    = ${RESHDIR}/flim_data.h ${RESHDIR}/tin_data.h ${RESHDIR}/logos_data.h ${RESHDIR}/usp_talon_data.h
 
 # Static files, e.g. the readme.txt file, that get copied straight to
 # the dist directory. We're not including the ${STATICRES} directory
@@ -161,6 +161,23 @@ ${STATICRES}/logos.dat:
 ${RESHDIR}/logos_data.h: ${STATICRES}/logos.dat
 	dat ${STATICRES}/logos.dat -h $@
 
+${STATICRES}/usptalon.dat:
+	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/usp_talon_m.pcx
+	dat $@ usp_talon_m.pcx NAME=USP_TALON_M
+	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/usp_talon_l1.pcx
+	dat $@ usp_talon_l1.pcx NAME=USP_TALON_L1
+	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/usp_talon_l2.pcx
+	dat $@ usp_talon_l2.pcx NAME=USP_TALON_L2
+	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/usp_talon_r1.pcx
+	dat $@ usp_talon_r1.pcx NAME=USP_TALON_R1
+	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/usp_talon_r2.pcx
+	dat $@ usp_talon_r2.pcx NAME=USP_TALON_R2
+	dat $@ -c1 -f -bpp 8 -t PAL -n1 -k -s0 -a ${RESDIR}/sprites/usp_talon_m.pcx
+	dat $@ usp_talon_m.pcx NAME=USP_TALON_PALETTE
+
+${RESHDIR}/usp_talon_data.h: ${STATICRES}/usptalon.dat
+	dat ${STATICRES}/usptalon.dat -h $@
+
 ${STATICRES}/font/flim.dat:
 	dat $@ -c2 -f -bpp 8 -t FONT -n1 -k -s0 -a ${RESDIR}/font/flim_w.pcx ${RESDIR}/font/flim_g.pcx
 	dat $@ flim_w.pcx NAME=FLIM_WHITE
@@ -176,10 +193,3 @@ ${STATICRES}/font/tin.dat:
 
 ${RESHDIR}/tin_data.h: ${STATICRES}/font/tin.dat
 	dat ${STATICRES}/font/tin.dat -h $@
-
-${STATICRES}/tstspr.dat:
-	dat $@ -c1 -f -bpp 8 -t CMP -n1 -k -s0 -a ${RESDIR}/sprites/test_sprite.bmp
-	dat $@ test_sprite.bmp NAME=TEST_SPRITE
-
-${RESHDIR}/test_sprite_data.h: ${STATICRES}/tstspr.dat
-	dat ${STATICRES}/tstspr.dat -h $@

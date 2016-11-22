@@ -37,7 +37,7 @@ static void show_startup_logos() {
  */
 void logos_init() {
     // Play music, display logos and then shut down.
-    //music_start(&MUSIC_LOGOS);
+    music_start(&MUSIC_LOGOS);
     show_startup_logos();
 }
 
