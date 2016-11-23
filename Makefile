@@ -102,6 +102,9 @@ ${DISTDIR}:
 ${RESHDIR}:
 	mkdir -p ${RESHDIR}
 
+${STATICRES}/font/:
+	mkdir -p ${STATICRES}/font/
+
 %${OBJSFX}.o: %.c
 	${CC} -c -o $@ $? ${CFLAGS}
 
@@ -124,7 +127,7 @@ dist: ${ZIPDIST}
 
 all: game ${ZIPDIST}
 
-game: ${DISTDIR} ${RESHDIR} ${RESHS} ${DISTDIR}/${BIN} ${STATICDEST}
+game: ${DISTDIR} ${RESHDIR} ${STATICRES}/font/ ${RESHS} ${DISTDIR}/${BIN} ${STATICDEST}
 
 static: ${STATICDEST}
 
@@ -134,6 +137,7 @@ clean:
 	rm -rf ${DISTDIR}
 	rm -f ${DISTPUSHD}/ceegee-*.zip
 	rm -f ${OBJS} ${RESHS} ${RESDATS}
+	rm -rf ${STATICRES}/font/ ${RESHDIR}
 
 # From here on is a list of all resource files created by the dat utility.
 # All items here should also appear in the ${RESDATS} and ${RESHS} variables.
