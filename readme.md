@@ -47,7 +47,9 @@ Windows users can likely use [a binary](https://www.allegro.cc/files/?v=4.4)
 from the Allegro website. For Mac OS X, I've made a build that includes
 the `dat` utility, [available on this repository.](https://github.com/msikma/liballeg.4.4.2-osx)
 Just clone it and put its `tools` directory in your path, that should be
-sufficient.
+sufficient. Linux users can probably get the utility by installing Allegro
+using their package manager, e.g. [liballegro4-dev](https://packages.debian.org/jessie/liballegro4-dev)
+for Debian.
 
 ### Compiling the project
 
