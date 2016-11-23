@@ -32,8 +32,8 @@ src/gfx/res/data
 
 # Executables
 *.exe
-# Permit the compiled game itself to be committed.
-!dist/*.exe
+# Permit cwsdpmi.exe to be committed for convenience
+!static/cwsdpmi.exe
 *.out
 *.app
 *.i*86
