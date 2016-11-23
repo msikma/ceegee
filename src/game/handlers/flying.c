@@ -17,6 +17,12 @@ int sx;
 int sy;
 
 /**
+ * Request the flying handler dependencies.
+ */
+void flying_deps() {
+}
+
+/**
  * Initialize the flying handler.
  */
 void flying_init() {

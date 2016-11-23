@@ -12,6 +12,12 @@
 #include "src/gfx/bitmaps.h"
 
 /**
+ * Request the initial handler dependencies.
+ */
+void initial_deps() {
+}
+
+/**
  * Initialize the initial handler.
  *
  * This handler is used when the game boots up. It sets up whatever

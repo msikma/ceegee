@@ -28,6 +28,12 @@ static void show_startup_logos() {
 }
 
 /**
+ * Request the logos handler dependencies.
+ */
+void logos_deps() {
+}
+
+/**
  * Initialize the logos handler.
  *
  * Used to display the logos at the start of the game. A series of logos

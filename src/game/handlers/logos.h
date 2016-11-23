@@ -9,6 +9,7 @@
 #define __CEEGEE_GAME_HANDLERS_LOGOS__
 
 static void show_startup_logos();
+void logos_deps();
 void logos_init();
 void logos_update();
 void logos_render();

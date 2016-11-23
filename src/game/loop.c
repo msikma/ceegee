@@ -19,6 +19,7 @@ bool game_loop_exit = FALSE;
 bool handler_exit = FALSE;
 
 // Pointers to the active handler functions.
+void (*handler_deps_ptr)();
 void (*handler_init_ptr)();
 void (*handler_update_ptr)();
 void (*handler_render_ptr)();
@@ -33,6 +34,7 @@ void set_handler() {
         // Initial state: performs all tasks that are globally required
         // for the game to function, and loads all basic resources.
         case STATE_INITIAL:
+            handler_deps_ptr = initial_deps;
             handler_init_ptr = initial_init;
             handler_update_ptr = initial_update;
             handler_render_ptr = initial_render;
@@ -41,6 +43,7 @@ void set_handler() {
             break;
         // Displays the logos at the start of the game.
         case STATE_LOGOS:
+            handler_deps_ptr = logos_deps;
             handler_init_ptr = logos_init;
             handler_update_ptr = logos_update;
             handler_render_ptr = logos_render;
@@ -49,6 +52,7 @@ void set_handler() {
             break;
         // When flying a spaceship in a level.
         case STATE_FLYING:
+            handler_deps_ptr = flying_deps;
             handler_init_ptr = flying_init;
             handler_update_ptr = flying_update;
             handler_render_ptr = flying_render;
@@ -83,7 +87,8 @@ bool game_loop_will_exit() {
  * we hook onto a 'handler' and then call the handler's functions.
  * Each handler has several predetermined external functions:
  *
- *    - init()      - Ensures that it has all resources loaded to work.
+ *    - deps()      - Ensures that it has all resources loaded to work.
+ *    - init()      - Sets the handler to a correct initial state.
  *    - update()    - Updates the internal state based on user input and logic.
  *    - render()    - Renders its output to a bitmap buffer.
  *    - will_exit() - Returns true if we must stop this handler.
@@ -97,8 +102,8 @@ bool game_loop_will_exit() {
  * a level, we would set the function pointers to 'level_init', etc.
  *
  * This takes place in the outer loop. Once the handler is set, we call
- * its init() function and enter the inner loop, which executes once
- * per frame and calls the handler's update() and render() functions.
+ * its deps() and init() functions and enter the inner loop, which executes
+ * once per frame and calls the handler's update() and render() functions.
  *
  * When a handler is done (for example, if a user has completed a level,
  * and control of the game logic must be handed back to the 'menu' handler)
@@ -113,7 +118,8 @@ void game_loop() {
         // ending in _ptr to the appropriate handler functions.
         set_handler();
 
-        // Ask the handler to initialize itself.
+        // Ask the handler to register its dependencies and initialize itself.
+        handler_deps_ptr();
         handler_init_ptr();
 
         // Start the handler's own loop. Run update(), vsync() and render(),

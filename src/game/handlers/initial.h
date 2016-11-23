@@ -8,6 +8,7 @@
 #ifndef __CEEGEE_GAME_HANDLERS_INITIAL__
 #define __CEEGEE_GAME_HANDLERS_INITIAL__
 
+void initial_deps();
 void initial_init();
 void initial_update();
 void initial_render();
