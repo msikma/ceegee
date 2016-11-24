@@ -75,7 +75,7 @@ ZIPOPTS   = -r -9 -T -o -v
 
 # Include only the debugging exe by default, and vice versa.
 ifdef DEBUG
-	ZIPLOCAL = ceegee-${BRANCH_LC}-${COUNT}-debug.zip
+	ZIPLOCAL = ceegee-${BRANCH_LC}-debug-${COUNT}.zip
 	ZIPEXCL = --exclude=*ceegee.exe*
 else
 	ZIPLOCAL = ceegee-${BRANCH_LC}-${COUNT}.zip
