@@ -10,8 +10,9 @@ CFLAGS    = -DHAVE_STDBOOL_H=1 -DALLEGRO_HAVE_INTTYPES_H -fgnu89-inline -Wall -W
 LDFLAGS   = -Lvendor/allegro-4.2.2-xc/lib/djgpp -lalleg
 
 # Enable debugging functionality if invoked with DEBUG=1.
-# We'll also suffix all object files with _debug, and rename the exe file,
-# to force the game to be recompiled completely if debugging is enabled.
+# We'll also add _debug as a suffix to all object files with _debug
+# and rename the exe file, to force the game to be recompiled completely
+# if debugging is enabled.
 ifdef DEBUG
 	CFLAGS += -DDEBUG=1
 	OBJSFX  = _debug
