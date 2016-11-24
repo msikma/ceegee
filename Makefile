@@ -53,13 +53,17 @@ SRC       = $(shell find ${SRCDIR} -name "*.c" 2> /dev/null) \
 OBJS      = $(SRC:%.c=%${OBJSFX}.o)
 
 # Some information from Git that we'll use for the version indicator file.
+# TODO: it works, but we should probably escape the quotes in these variables.
 HASH      = $(shell git rev-parse --short HEAD | tr [:lower:] [:upper:])
 BRANCH_LC = $(shell git describe --all | sed s@heads/@@)
 BRANCH    = $(shell echo ${BRANCH_LC} | tr [:lower:] [:upper:])
 COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d")
 DATETIME  = $(shell date +"%Y-%m-%d %T")
-VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild: ${COUNT}-${BRANCH} ${DATETIME} (${HASH})\r\n\"" -DCEEGEE_SHORT_VERSION="\"${COUNT}-${BRANCH} ${DATE} (${HASH})\""
+OSINFO    = $(shell uname -v)
+BUILDTIME = $(shell date +"%Y-%m-%dT%T%z")
+CCINFO    = $(shell ${DJGPP_CC} --version | head -n 1)
+VDEF      = -DCEEGEE_NAME="\"${TITLE}\"" -DCEEGEE_URL="\"${URL}\"" -DCEEGEE_COPYRIGHT="\"${COPYRIGHT}\"" -DCEEGEE_VERSION="\"${TITLE}\r\nBuild ${COUNT}-${BRANCH} ${DATETIME} (${HASH})\r\n\"" -DCEEGEE_SHORT_VERSION="\"${COUNT}-${BRANCH} ${DATE} (${HASH})\"" -DCEEGEE_OSINFO="\"${OSINFO}\"" -DCEEGEE_CCINFO="\"${CCINFO}\"" -DCEEGEE_CFLAGS="\"${CFLAGS}\"" -DCEEGEE_LDFLAGS="\"${LDFLAGS}\"" -DCEEGEE_BUILDTIME="\"${BUILDTIME}\""
 
 # When making a zip file, we don't want to include the dist/ directory.
 # Set additional variables here. The ZIPLOCAL file is used after we pushd

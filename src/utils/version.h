@@ -11,6 +11,11 @@ const char *get_name();
 const char *get_short_version();
 const char *get_url();
 const char *get_version();
+const char *get_cc_info();
+const char *get_os_info();
+const char *get_cflags();
+const char *get_ldflags();
+const char *get_build_time();
 void print_version();
 
 #endif

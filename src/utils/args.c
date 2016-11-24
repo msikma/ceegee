@@ -19,8 +19,9 @@ void print_usage(char *name) {
     printf("\r\n");
     printf("Usage: %s [options]\r\n", name);
     printf("\r\n");
-    printf("  /h /?     Display usage information.\r\n");
+    printf("  /h or /?  Display usage information.\r\n");
     printf("  /v        Display version.\r\n");
+    printf("  /b        Write build information for debugging.\r\n");
     printf("  /j        Play a song from the jukebox.\r\n");
     printf("\r\n");
     printf("More information: %s\r\n", get_url());
@@ -46,6 +47,9 @@ int parse_args(int argc, char **argv) {
         }
         if (strcmp(argv[a], "/v") == 0) {
             return ARG_VERSION;
+        }
+        if (strcmp(argv[a], "/b") == 0) {
+            return ARG_SYSINFO;
         }
         if (strcmp(argv[a], "/j") == 0) {
             return ARG_JUKEBOX;

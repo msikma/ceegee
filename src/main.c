@@ -10,6 +10,7 @@
 #include "src/jukebox.h"
 #include "src/utils/args.h"
 #include "src/utils/version.h"
+#include "src/utils/build.h"
 
 /**
  * Main entrance point of the application.
@@ -26,6 +27,9 @@ int main(int argc, char **argv) {
         case ARG_VERSION:
             print_version();
             return 0;
+        case ARG_SYSINFO:
+            print_sysinfo();
+            return write_sysinfo_fb();
         case ARG_JUKEBOX:
             start_jukebox();
             return 0;

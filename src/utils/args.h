@@ -10,6 +10,7 @@
 #define ARG_VERSION 2
 #define ARG_JUKEBOX 3
 #define ARG_USAGE 4
+#define ARG_SYSINFO 5
 
 int parse_args(int argc, char **argv);
 void print_usage();
