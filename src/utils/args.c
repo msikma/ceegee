@@ -42,16 +42,16 @@ int parse_args(int argc, char **argv) {
         if (strcmp(argv[a], "/?") == 0) {
             return ARG_USAGE;
         }
-        if (strcmp(argv[a], "/h") == 0) {
+        if (strcmp(argv[a], "/h") == 0 || strcmp(argv[a], "/H") == 0) {
             return ARG_USAGE;
         }
-        if (strcmp(argv[a], "/v") == 0) {
+        if (strcmp(argv[a], "/v") == 0 || strcmp(argv[a], "/V") == 0) {
             return ARG_VERSION;
         }
-        if (strcmp(argv[a], "/b") == 0) {
+        if (strcmp(argv[a], "/b") == 0 || strcmp(argv[a], "/B") == 0) {
             return ARG_SYSINFO;
         }
-        if (strcmp(argv[a], "/j") == 0) {
+        if (strcmp(argv[a], "/j") == 0 || strcmp(argv[a], "/J") == 0) {
             return ARG_JUKEBOX;
         }
     }
