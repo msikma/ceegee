@@ -53,9 +53,9 @@ SRC       = $(shell find ${SRCDIR} -name "*.c" 2> /dev/null) \
 OBJS      = $(SRC:%.c=%${OBJSFX}.o)
 
 # Some information from Git that we'll use for the version indicator file.
-HASH      = $(shell git rev-parse --short HEAD | awk '{print toupper($0)}')
+HASH      = $(shell git rev-parse --short HEAD | tr [:lower:] [:upper:])
 BRANCH_LC = $(shell git describe --all | sed s@heads/@@)
-BRANCH    = $(shell echo ${BRANCH_LC} | awk "{print toupper($0)}")
+BRANCH    = $(shell echo ${BRANCH_LC} | tr [:lower:] [:upper:])
 COUNT     = $(shell git rev-list HEAD --count)
 DATE      = $(shell date +"%Y-%m-%d")
 DATETIME  = $(shell date +"%Y-%m-%d %T")
