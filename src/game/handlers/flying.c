@@ -15,7 +15,6 @@
 
 //test
 #include "src/gfx/res/usp_talon.h"
-#include "src/audio/midi.h"
 #include "src/game/sprites/ships.h"
 
 SHIP theship;
