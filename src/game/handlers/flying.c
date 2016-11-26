@@ -59,7 +59,8 @@ void flying_render(BITMAP *buffer) {
 
     if (DEBUG) {
         draw_textf(buffer, 0, 0, TXT_WHITE, -1, -1, TXT_REGULAR, TXT_LEFT,
-            "x: %03d, y: %03d, w: %03d, h: %03d, pivot: %03d", theship.x, theship.y, theship.w, theship.h, theship.pivot);
+            "x: %03d, y: %03d, w: %03d, h: %03d, pivot: %03d",
+            theship.x, theship.y, theship.w, theship.h, theship.pivot);
     }
 }
 
