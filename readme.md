@@ -1,10 +1,22 @@
 CeeGee
 ======
 
-Small C game that I'm working on to teach myself the language.
-This is designed for MS-DOS, meaning you need DJGPP to compile it.
+This is a small open source C game designed for MS-DOS. It's made in mid-90s
+PC gaming style, and runs at full speed on a 486 or higher (or in
+[DOSBox](http://www.dosbox.com/)).
 
-This project is still in the very early stages and doesn't work yet!
+This project is still in the very early stages and doesn't work yet! Since this
+game is designed to run on MS-DOS, you'll need DJGPP to compile it.
+Instructions are below.
+
+
+Builds
+------
+
+The [latest builds page](http://ceegee.whahay.com/) is updated as soon
+as the `master` branch is changed. You can also follow
+[@CeeGeeBuilds](https://twitter.com/CeeGeeBuilds) on Twitter if you
+want to know about new builds as soon as they're available.
 
 
 Installation
