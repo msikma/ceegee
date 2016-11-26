@@ -5,6 +5,7 @@
 
 #include <allegro.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "src/game/handlers/flying.h"
 #include "src/game/state.h"
@@ -15,32 +16,27 @@
 //test
 #include "src/gfx/res/usp_talon.h"
 #include "src/audio/midi.h"
+#include "src/game/sprites/ships.h"
 
-int sx;
-int sy;
-int sw = 50;
-int sh = 50;
+SHIP theship;
 
 /**
  * Request the flying handler dependencies.
  */
 void flying_deps() {
+    load_flim_dat();
+    load_usp_talon_dat();
 }
 
 /**
  * Initialize the flying handler.
  */
 void flying_init() {
-    load_usp_talon_dat();
     add_flim_palette_colors(USP_TALON_DAT[USP_TALON_PALETTE].dat);
     set_palette(USP_TALON_DAT[USP_TALON_PALETTE].dat);
 
-    COMPILED_SPRITE *usptalon = (COMPILED_SPRITE *)USP_TALON_DAT[USP_TALON_M].dat;
-
-    sx = 150;
-    sy = 80;
-    sw = usptalon->w;
-    sh = usptalon->h;
+    theship = ship_create(USP_TALON);
+    ship_set_pos(&theship, 150, 80);
 }
 
 /**
@@ -51,32 +47,7 @@ void flying_init() {
  */
 void flying_update() {
     poll_keyboard();
-
-    if (key[KEY_LEFT]) {
-        sx -= 2;
-    }
-    if (key[KEY_RIGHT]) {
-        sx += 2;
-    }
-    if (key[KEY_UP]) {
-        sy -= 2;
-    }
-    if (key[KEY_DOWN]) {
-        sy += 2;
-    }
-
-    if (sx < 0) {
-        sx = 0;
-    }
-    if (sy < 0) {
-        sy = 0;
-    }
-    if (sx > CEEGEE_SCR_W - sw) {
-        sx = CEEGEE_SCR_W - sw;
-    }
-    if (sy > CEEGEE_SCR_H - sh) {
-        sy = CEEGEE_SCR_H - sh;
-    }
+    ship_feed_input(&theship);
 }
 
 /**
@@ -84,11 +55,11 @@ void flying_update() {
  */
 void flying_render(BITMAP *buffer) {
     clear_to_color(buffer, palette_color[252]);
-    draw_compiled_sprite(buffer, USP_TALON_DAT[USP_TALON_M].dat, sx, sy);
+    ship_draw(&theship, buffer);
 
     if (DEBUG) {
         draw_textf(buffer, 0, 0, TXT_WHITE, -1, -1, TXT_REGULAR, TXT_LEFT,
-            "x: %03d, y: %03d, w: %03d, h: %03d", sx, sy, sw, sh);
+            "x: %03d, y: %03d, w: %03d, h: %03d, pivot: %03d", theship.x, theship.y, theship.w, theship.h, theship.pivot);
     }
 }
 
