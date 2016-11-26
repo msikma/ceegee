@@ -48,7 +48,7 @@ page for instructions.
 
 All other vendor code is automatically compiled when you run `make`.
 
-### Allegro `dat` utility
+### Allegro datafile utility
 
 The `dat` utility from Allegro 4 is required to process graphical assets.
 We can't use the one from `allegro-4.2.2-xc` because that one is designed
