@@ -7,6 +7,8 @@
 #include <stdio.h>
 
 #include "src/game/loop.h"
+#include "src/gfx/deps/manager.h"
+#include "src/gfx/deps/register.h"
 #include "src/gfx/modes.h"
 
 /**
@@ -15,8 +17,11 @@
  * This initializes Allegro, then starts the game loop.
  */
 void start_game() {
-    // Install Allegro drivers and hand over control to the game loop.
+    // Install Allegro drivers.
     initialize_allegro();
+    // Register our game resources to the dependency manager.
+    register_resources();
+    // Hand over control to the game loop.
     game_loop();
 }
 
@@ -29,4 +34,9 @@ void shutdown() {
     clear_bitmap(screen);
     screen_text_mode();
     printf("Thanks for playing Ceegee.\r\n");
+
+    // Print out the resource list if debugging.
+    if (DEBUG) {
+        debug_res_list();
+    }
 }

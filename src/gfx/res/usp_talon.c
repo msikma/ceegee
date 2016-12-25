@@ -7,31 +7,15 @@
 #include <stdio.h>
 
 #include "src/gfx/res/usp_talon.h"
+#include "src/gfx/deps/manager.h"
+#include "src/utils/counters.h"
 
-DATAFILE *USP_TALON_DAT;
-int USP_TALON_LOADED = FALSE;
+int RES_ID_USP_TALON;
+char RES_PATH_USP_TALON[] = "data\\res\\usptalon.dat";
 
-/**
- * Load the test sprite into memory.
- */
-int load_usp_talon_dat() {
-    if (USP_TALON_LOADED == TRUE) {
-        return 0;
-    }
-    USP_TALON_DAT = load_datafile(USP_TALON_PATH);
+DATAFILE* data;
 
-    if (!USP_TALON_DAT) {
-        return 1;
-    }
-
-    USP_TALON_LOADED = TRUE;
-    return 0;
-}
-
-/**
- * Unload the test sprite.
- */
-void unload_usp_talon_dat() {
-    unload_datafile(USP_TALON_DAT);
-    USP_TALON_LOADED = FALSE;
+void usp_talon_register() {
+    RES_ID_USP_TALON = res_id();
+    res_register(RES_ID_USP_TALON, RES_PATH_USP_TALON, 0);
 }

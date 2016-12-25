@@ -8,7 +8,6 @@
 #ifndef __CEEGEE_GAME_HANDLERS_LOGOS__
 #define __CEEGEE_GAME_HANDLERS_LOGOS__
 
-static void show_startup_logos();
 void logos_deps();
 void logos_init();
 void logos_update();

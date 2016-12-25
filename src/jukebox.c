@@ -7,12 +7,17 @@
 #include <stdio.h>
 
 #include "src/audio/midi.h"
-#include "src/gfx/modes.h"
 #include "src/game.h"
+#include "src/gfx/deps/manager.h"
+#include "src/gfx/deps/register.h"
+#include "src/gfx/modes.h"
 #include "src/gfx/res/flim.h"
 #include "src/gfx/starfield/starfield.h"
 #include "src/gfx/text.h"
 #include "src/jukebox.h"
+#include "src/utils/counters.h"
+
+int REQ_ID_JUKEBOX_HANDLER;
 
 // Track that's currently playing.
 struct song *CURR_TRACK;
@@ -75,16 +80,21 @@ void update_track_data() {
  * variables used by the jukebox.
  */
 void initialize_jukebox() {
+    REQ_ID_JUKEBOX_HANDLER = req_id();
+
+    // Register our game resources to the dependency manager.
+    register_resources();
+
     // Switch to graphics mode.
     initialize_allegro();
     screen_gfx_mode();
     initialize_sound();
-    load_flim_dat();
+    dep_require(RES_ID_FLIM, REQ_ID_JUKEBOX_HANDLER);
 
     // Prepare for the jukebox loop.
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
     RGB *pal = get_starfield_palette();
-    add_flim_palette_colors(pal);
+    add_text_colors(pal);
     set_palette(pal);
     free(pal);
     font_height = FLIM_HEIGHT;

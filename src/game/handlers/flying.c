@@ -8,33 +8,37 @@
 #include <stdio.h>
 
 #include "src/game/handlers/flying.h"
-#include "src/game/state.h"
-#include "src/gfx/res/flim.h"
-#include "src/gfx/modes.h"
-#include "src/gfx/text.h"
-
-//test
-#include "src/gfx/res/usp_talon.h"
 #include "src/game/sprites/ships.h"
+#include "src/game/state.h"
+#include "src/gfx/deps/manager.h"
+#include "src/gfx/res/flim.h"
+#include "src/gfx/res/usp_talon.h"
+#include "src/gfx/text.h"
+#include "src/utils/counters.h"
 
 SHIP theship;
+
+DATAFILE* usp_talon_data;
+int REQ_ID_FLYING_HANDLER;
 
 /**
  * Request the flying handler dependencies.
  */
 void flying_deps() {
-    load_flim_dat();
-    load_usp_talon_dat();
+    REQ_ID_FLYING_HANDLER = req_id();
+    dep_require(RES_ID_FLIM, REQ_ID_FLYING_HANDLER);
+    dep_require(RES_ID_USP_TALON, REQ_ID_FLYING_HANDLER);
 }
 
 /**
  * Initialize the flying handler.
  */
 void flying_init() {
-    add_flim_palette_colors(USP_TALON_DAT[USP_TALON_PALETTE].dat);
-    set_palette(USP_TALON_DAT[USP_TALON_PALETTE].dat);
+    usp_talon_data = dep_data_ref(RES_ID_USP_TALON);
+    add_text_colors(usp_talon_data[USP_TALON_PALETTE].dat);
+    set_palette(usp_talon_data[USP_TALON_PALETTE].dat);
 
-    theship = ship_create(USP_TALON);
+    theship = ship_create(USP_TALON, usp_talon_data);
     ship_set_pos(&theship, 150, 80);
 }
 
@@ -77,6 +81,9 @@ bool flying_will_exit() {
  * Shutdown and exit the flying handler.
  */
 void flying_exit() {
+    dep_forget(RES_ID_FLIM, REQ_ID_FLYING_HANDLER);
+    dep_forget(RES_ID_USP_TALON, REQ_ID_FLYING_HANDLER);
+
     // Shut down the game after this handler is complete.
     set_next_state(STATE_EXIT);
 }
