@@ -6,16 +6,12 @@
 #ifndef __CEEGEE_GAME_STATE__
 #define __CEEGEE_GAME_STATE__
 
-#define STATE_INITIAL 1
-#define STATE_FLYING 2
-#define STATE_EXIT 3
-#define STATE_UNDETERMINED 4
-#define STATE_LOGOS 5
+typedef struct game_state_obj {
+    int loop_state_post_init;
+} game_state_obj;
 
-int get_curr_state();
-int get_next_state();
-void advance_state();
-void set_curr_state(int state);
-void set_next_state(int state);
+extern game_state_obj game_state;
+
+void initialize_game_state();
 
 #endif

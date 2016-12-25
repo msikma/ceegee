@@ -6,6 +6,7 @@
 #include <allegro.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "src/gfx/deps/manager.h"
 

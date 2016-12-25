@@ -5,6 +5,7 @@
 
 #include <allegro.h>
 #include <stdio.h>
+#include <stddef.h>
 
 #include "src/audio/midi.h"
 #include "src/game.h"

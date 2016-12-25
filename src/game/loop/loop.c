@@ -11,7 +11,7 @@
 #include "src/game/handlers/flying.h"
 #include "src/game/handlers/initial.h"
 #include "src/game/handlers/logos.h"
-#include "src/game/state.h"
+#include "src/game/loop/state.h"
 
 // Whether the game loop will exit.
 bool game_loop_exit = FALSE;

@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 #include "src/audio/midi.h"
-#include "src/game/state.h"
+#include "src/game/loop/state.h"
 #include "src/gfx/bitmaps.h"
 #include "src/gfx/res/flim.h"
 #include "src/gfx/res/logos.h"

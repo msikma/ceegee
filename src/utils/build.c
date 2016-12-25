@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "src/utils/build.h"
 #include "src/utils/version.h"
@@ -16,7 +17,7 @@ bool has_info = false;
  * Formats system information. Here is an example:
  *
  * CeeGee Engine, (C) 2015-2016, Michiel Sikma (MIT license)
- * 
+ *
  * TIME=2016-11-24T13:32:40+0100
  * BUILD=103-MASTER 2016-11-24 (DD160F4)
  * CC=i586-pc-msdosdjgpp-gcc (GCC) 5.2.0
@@ -31,7 +32,7 @@ static void format_sysinfo() {
   if (has_info) {
     return;
   }
-  
+
   // Format all system information into one string.
   snprintf(
     sysinfo,
@@ -67,7 +68,7 @@ void print_sysinfo() {
  */
 int write_sysinfo(char fn[]) {
   format_sysinfo();
-  
+
   FILE *dbgfile = fopen(fn, "w");
   if (dbgfile == NULL) {
     return SYSINFO_ERROR_OPENING_FILE;

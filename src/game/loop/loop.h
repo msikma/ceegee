@@ -5,8 +5,8 @@
 
 #include <stdbool.h>
 
-#ifndef __CEEGEE_GAME_LOOP__
-#define __CEEGEE_GAME_LOOP__
+#ifndef __CEEGEE_GAME_LOOP_LOOP__
+#define __CEEGEE_GAME_LOOP_LOOP__
 
 void game_loop();
 void set_handler();
