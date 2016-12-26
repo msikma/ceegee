@@ -11,6 +11,7 @@
 #include "src/game/handlers/flying.h"
 #include "src/game/handlers/initial.h"
 #include "src/game/handlers/logos.h"
+#include "src/game/handlers/jukebox.h"
 #include "src/game/loop/state.h"
 
 // Whether the game loop will exit.
@@ -58,6 +59,15 @@ void set_handler() {
             handler_render_ptr = flying_render;
             handler_will_exit_ptr = flying_will_exit;
             handler_exit_ptr = flying_exit;
+            break;
+        // The jukebox that can be invoked from the command line.
+        case STATE_JUKEBOX:
+            handler_deps_ptr = jukebox_deps;
+            handler_init_ptr = jukebox_init;
+            handler_update_ptr = jukebox_update;
+            handler_render_ptr = jukebox_render;
+            handler_will_exit_ptr = jukebox_will_exit;
+            handler_exit_ptr = jukebox_exit;
             break;
         default:
             // We've entered an unknown state.

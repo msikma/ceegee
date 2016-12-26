@@ -8,6 +8,16 @@
 #ifndef __CEEGEE_GAME_HANDLERS_JUKEBOX__
 #define __CEEGEE_GAME_HANDLERS_JUKEBOX__
 
+#define JUKEBOX_EXIT 1
+#define JUKEBOX_NEXT_SONG 2
+#define JUKEBOX_PREV_SONG 3
+
+void finish_song();
+void prev_song();
+void next_song();
+void draw_help();
+void update_song_data();
+void update_track_data();
 void jukebox_deps();
 void jukebox_init();
 void jukebox_update();

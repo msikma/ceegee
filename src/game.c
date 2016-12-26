@@ -6,6 +6,7 @@
 #include <allegro.h>
 #include <stdio.h>
 
+#include "src/audio/midi.h"
 #include "src/game.h"
 #include "src/game/loop/loop.h"
 #include "src/game/loop/state.h"
@@ -28,7 +29,7 @@ void start_game() {
 /**
  * Starts the application with the jukebox as the first state.
  */
-void start_jukeboxa() {
+void start_jukebox() {
     initialize_resources();
     game_state.loop_state_post_init = STATE_JUKEBOX;
     game_loop();
@@ -41,6 +42,7 @@ void start_jukeboxa() {
 void initialize_resources() {
     // Install Allegro drivers.
     initialize_allegro();
+    initialize_sound();
     // Register our game resources to the dependency manager.
     register_resources();
     // Set up the game state defaults.

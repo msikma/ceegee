@@ -7,7 +7,6 @@
 
 #include "src/audio/midi.h"
 #include "src/game.h"
-#include "src/jukebox.h"
 #include "src/utils/args.h"
 #include "src/utils/version.h"
 #include "src/utils/build.h"
