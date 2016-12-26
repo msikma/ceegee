@@ -52,6 +52,10 @@ STATICDEST= $(subst ${STATICDIR},${DISTDIR},${STATIC}) ${RESDDEST}
 SRC       = $(shell find ${SRCDIR} -name "*.c" 2> /dev/null) \
             $(shell find ${VENDOR}/xorshift -name "*.c" -not -name "test_*.c" 2> /dev/null)
 OBJS      = $(SRC:%.c=%${OBJSFX}.o)
+# All object files, including those for .c files that no longer exist.
+# Used to ensure we delete all object files.
+ALL_OBJS  = $(shell find ${SRCDIR} -name "*.o" 2> /dev/null) \
+            $(shell find ${VENDOR}/xorshift -name "*.o" -not -name "test_*.o" 2> /dev/null)
 
 # Some information from Git that we'll use for the version indicator file.
 # TODO: it works, but we should probably escape the quotes in these variables.
@@ -141,7 +145,8 @@ res: ${RESHS}
 clean:
 	rm -rf ${DISTDIR}
 	rm -f ${DISTPUSHD}/ceegee-*.zip
-	rm -f ${OBJS} ${RESHS} ${RESDATS}
+	rm -f ${ALL_OBJS}
+	rm -f ${RESHS} ${RESDATS}
 	rm -rf ${STATICRES}/font/ ${RESHDIR}
 
 # From here on is a list of all resource files created by the dat utility.

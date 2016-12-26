@@ -7,45 +7,21 @@
 #include <stdio.h>
 
 #include "src/gfx/res/flim.h"
+#include "src/gfx/deps/manager.h"
+#include "src/utils/counters.h"
 
-DATAFILE *FLIM_DAT;
+int RES_ID_FLIM;
+char RES_PATH_FLIM[] = "data\\res\\font\\flim.dat";
+
 int FLIM_HEIGHT;
-int FLIM_LOADED = FALSE;
+DATAFILE* data;
 
-/**
- * Adds the Flim font standard colors to a palette.
- * The colors are added at the end of the palette.
- */
-void add_flim_palette_colors(RGB *pal) {
-    pal[254].r = pal[254].g = pal[254].b = 63;
-    pal[253].r = pal[253].g = pal[253].b = 28;
-    pal[252].r = pal[252].g = pal[252].b = 12;
+void flim_register() {
+    RES_ID_FLIM = res_id();
+    res_register(RES_ID_FLIM, RES_PATH_FLIM, flim_callback);
 }
 
-/**
- * Load the Flim font into memory.
- */
-int load_flim_dat() {
-    if (FLIM_LOADED == TRUE) {
-        return 0;
-    }
-    FLIM_DAT = load_datafile(FLIM_PATH);
-
-    if (!FLIM_DAT) {
-        return 1;
-    }
-
-    // Acquire the font height, slightly adjusted.
-    FLIM_HEIGHT = text_height(FLIM_DAT[FLIM_WHITE].dat) - 4;
-
-    FLIM_LOADED = TRUE;
-    return 0;
-}
-
-/**
- * Unload the Flim font. Unnecessary since it's used everywhere
- * in the game.
- */
-void unload_flim_dat() {
-    unload_datafile(FLIM_DAT);
+void flim_callback() {
+    data = dep_data_ref(RES_ID_FLIM);
+    FLIM_HEIGHT = text_height(data[FLIM_WHITE].dat) - 4;
 }

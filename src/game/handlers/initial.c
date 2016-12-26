@@ -7,9 +7,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "src/game/loop/state.h"
 #include "src/game/state.h"
-#include "src/gfx/modes.h"
 #include "src/gfx/bitmaps.h"
+#include "src/gfx/modes.h"
 
 /**
  * Request the initial handler dependencies.
@@ -55,5 +56,5 @@ bool initial_will_exit() {
  * Shutdown and exit the initial handler.
  */
 void initial_exit() {
-    set_next_state(STATE_LOGOS);
+    set_next_state(game_state.loop_state_post_init);
 }

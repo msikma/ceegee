@@ -8,6 +8,8 @@
 #ifndef __CEEGEE_GAME_HANDLERS_FLYING__
 #define __CEEGEE_GAME_HANDLERS_FLYING__
 
+extern int REQ_ID_FLYING_HANDLER;
+
 void flying_deps();
 void flying_init();
 void flying_update();

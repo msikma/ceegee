@@ -3,17 +3,14 @@
  * MIT License
  */
 
-#ifndef __CEEGEE_GFX_RES_LOGOS__
-#define __CEEGEE_GFX_RES_LOGOS__
+#include <allegro.h>
+
+#ifndef __CEEGEE_GFX_RES_LAGAS__
+#define __CEEGEE_GFX_RES_LAGAS__
 
 #include "src/gfx/res/data/logos_data.h"
 
-extern DATAFILE *LOGOS_DAT;
-extern int STARTUP_LOGO_BMP[];
-extern int STARTUP_LOGO_PAL[];
-extern int STARTUP_LOGOS;
-int load_logos_dat();
-static char LOGOS_PATH[] = "data\\res\\logos.dat";
-void unload_logos_dat();
+extern int RES_ID_LAGAS;
+void logos_register();
 
 #endif

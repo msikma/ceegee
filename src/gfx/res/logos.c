@@ -7,40 +7,13 @@
 #include <stdio.h>
 
 #include "src/gfx/res/logos.h"
+#include "src/gfx/deps/manager.h"
+#include "src/utils/counters.h"
 
-DATAFILE *LOGOS_DAT;
-int LOGOS_LOADED = FALSE;
+int RES_ID_LAGAS;
+char RES_PATH_LAGAS[] = "data\\res\\logos.dat";
 
-// Startup images and their associated palettes.
-int STARTUP_LOGO_BMP[] = {
-    ASLOGO_IMG, TEST_IMG
-};
-int STARTUP_LOGO_PAL[] = {
-    ASLOGO_PALETTE, TEST_PALETTE
-};
-int STARTUP_LOGOS = sizeof(STARTUP_LOGO_BMP) / sizeof(int);
-
-/**
- * Load the logo images into memory.
- */
-int load_logos_dat() {
-    if (LOGOS_LOADED == TRUE) {
-        return 0;
-    }
-    LOGOS_DAT = load_datafile(LOGOS_PATH);
-
-    if (!LOGOS_DAT) {
-        return 1;
-    }
-
-    LOGOS_LOADED = TRUE;
-    return 0;
-}
-
-/**
- * Unload the logo images.
- */
-void unload_logos_dat() {
-    unload_datafile(LOGOS_DAT);
-    LOGOS_LOADED = FALSE;
+void logos_register() {
+    RES_ID_LAGAS = res_id();
+    res_register(RES_ID_LAGAS, RES_PATH_LAGAS, 0);
 }

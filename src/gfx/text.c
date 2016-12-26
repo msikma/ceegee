@@ -7,8 +7,22 @@
 #include <stdio.h>
 
 #include "src/gfx/text.h"
+#include "src/gfx/deps/manager.h"
 #include "src/gfx/res/flim.h"
 #include "src/gfx/res/tin.h"
+
+DATAFILE *font_data;
+
+/**
+ * Adds the standard font colors to a palette. They're added to the
+ * end of the palette, at positions 252-254 (255 being reserved for black).
+ * These colors are used by the Flim and Tin fonts.
+ */
+void add_text_colors(RGB *pal) {
+    pal[254].r = pal[254].g = pal[254].b = 63;
+    pal[253].r = pal[253].g = pal[253].b = 28;
+    pal[252].r = pal[252].g = pal[252].b = 12;
+}
 
 /**
  * Draws text onto a buffer, with string formatting. The formatted
@@ -75,12 +89,14 @@ void draw_text(BITMAP *buffer, int x, int y, int color_a, int color_b,
     // Finally, print the text using a custom setup for each font.
     switch (font) {
         case TXT_REGULAR:
-            txt_fn(buffer, FLIM_DAT[FLIM_WHITE].dat, txt, x, y, color_a, bg);
-            txt_fn(buffer, FLIM_DAT[FLIM_GRAY].dat, txt, x, y, color_b, bg);
+            font_data = dep_data_ref(RES_ID_FLIM);
+            txt_fn(buffer, font_data[FLIM_WHITE].dat, txt, x, y, color_a, bg);
+            txt_fn(buffer, font_data[FLIM_GRAY].dat, txt, x, y, color_b, bg);
             break;
         case TXT_SMALL:
-            txt_fn(buffer, TIN_DAT[TIN_WHITE].dat, txt, x, y, color_a, bg);
-            txt_fn(buffer, TIN_DAT[TIN_GRAY].dat, txt, x, y, color_b, bg);
+            font_data = dep_data_ref(RES_ID_TIN);
+            txt_fn(buffer, font_data[TIN_WHITE].dat, txt, x, y, color_a, bg);
+            txt_fn(buffer, font_data[TIN_GRAY].dat, txt, x, y, color_b, bg);
             break;
     }
 }

@@ -3,16 +3,16 @@
  * MIT License
  */
 
+#include <allegro.h>
+
 #ifndef __CEEGEE_GFX_RES_FLIM__
 #define __CEEGEE_GFX_RES_FLIM__
 
 #include "src/gfx/res/data/flim_data.h"
 
-extern DATAFILE *FLIM_DAT;
 extern int FLIM_HEIGHT;
-int load_flim_dat();
-static char FLIM_PATH[] = "data\\res\\font\\flim.dat";
-void add_flim_palette_colors(RGB *pal);
-void unload_flim_dat();
+extern int RES_ID_FLIM;
+void flim_callback();
+void flim_register();
 
 #endif

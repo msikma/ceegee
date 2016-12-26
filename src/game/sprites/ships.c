@@ -15,26 +15,25 @@ int scr_boundary_y = CEEGEE_SCR_H;
 
 /**
  * Creates and returns a new ship instance.
+ *
+ * Requires a reference to a datafile for initializing the ship's graphics.
  */
-SHIP ship_create(int type) {
+SHIP ship_create(int type, DATAFILE* ship_data) {
+    SHIP inst;
     switch (type) {
         case USP_TALON:
-        default: // temporary.
-            load_usp_talon_dat();
-            SHIP inst = {
-                .x = 0,
-                .y = 0,
-                .pivot = PIVOT_CENTER
-            };
-            inst.cspr_m = (COMPILED_SPRITE *)USP_TALON_DAT[USP_TALON_M].dat;
-            inst.cspr_l1 = (COMPILED_SPRITE *)USP_TALON_DAT[USP_TALON_L1].dat;
-            inst.cspr_l2 = (COMPILED_SPRITE *)USP_TALON_DAT[USP_TALON_L2].dat;
-            inst.cspr_r1 = (COMPILED_SPRITE *)USP_TALON_DAT[USP_TALON_R1].dat;
-            inst.cspr_r2 = (COMPILED_SPRITE *)USP_TALON_DAT[USP_TALON_R2].dat;
+        default:
+            inst.x = 0;
+            inst.y = 0;
+            inst.pivot = PIVOT_CENTER;
+            inst.cspr_m = (COMPILED_SPRITE *)ship_data[USP_TALON_M].dat;
+            inst.cspr_l1 = (COMPILED_SPRITE *)ship_data[USP_TALON_L1].dat;
+            inst.cspr_l2 = (COMPILED_SPRITE *)ship_data[USP_TALON_L2].dat;
+            inst.cspr_r1 = (COMPILED_SPRITE *)ship_data[USP_TALON_R1].dat;
+            inst.cspr_r2 = (COMPILED_SPRITE *)ship_data[USP_TALON_R2].dat;
             inst.curr_frame = &inst.cspr_m;
             inst.w = inst.cspr_m->w;
             inst.h = inst.cspr_m->h;
-
             return inst;
     }
 }

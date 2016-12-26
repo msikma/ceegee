@@ -16,6 +16,7 @@
 
 #define TXT_MAX_SIZE 512
 
+void add_text_colors(RGB *pal);
 void draw_textf(BITMAP *buffer, int x, int y, int color_a, int color_b,
     int bg, int font, int align, const char *format, ...);
 void draw_text(BITMAP *buffer, int x, int y, int color_a, int color_b,

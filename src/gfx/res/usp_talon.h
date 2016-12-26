@@ -8,9 +8,7 @@
 
 #include "src/gfx/res/data/usp_talon_data.h"
 
-extern DATAFILE *USP_TALON_DAT;
-int load_usp_talon_dat();
-static char USP_TALON_PATH[] = "data\\res\\usptalon.dat";
-void unload_usp_talon_dat();
+extern int RES_ID_USP_TALON;
+void usp_talon_register();
 
 #endif

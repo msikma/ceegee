@@ -7,6 +7,8 @@
 #define __CEEGEE_GAME__
 
 void start_game();
+void start_jukebox();
 void shutdown();
+void initialize_resources();
 
 #endif
