@@ -84,6 +84,6 @@ Dependencies
 Copyright
 ---------
 
-Copyright © 2015-2016, [Michiel Sikma](mailto:michiel@sikma.org)
+Copyright © 2015-2017, [Michiel Sikma](mailto:michiel@sikma.org)
 
 MIT License

@@ -2,8 +2,8 @@
                         |      CeeGee Game Engine      |
                         |            README            |
                         +------------------------------+
-                        
-                   (C) Michiel Sikma, 2015-2016 - MIT License
+
+                   (C) Michiel Sikma, 2015-2017 - MIT License
 
       --------------------------------------------------------------------
 

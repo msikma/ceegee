@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016, Michiel Sikma <michiel@sikma.org>
+ * Copyright (C) 2015-2017, Michiel Sikma <michiel@sikma.org>
  * MIT License
  */
 
@@ -72,7 +72,7 @@ void logos_render(BITMAP *buffer) {
     set_palette(black_palette);
     blit(logos_data[ASLOGO_IMG].dat, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     draw_text(screen, 160, 154, TXT_WHITE, -1, -1,
-        TXT_REGULAR, TXT_CENTER, "(C) 2016, Avalanche Studios");
+        TXT_REGULAR, TXT_CENTER, "(C) 2017, Avalanche Studios");
     draw_text(screen, 160, 154 + FLIM_HEIGHT + 2, TXT_WHITE, -1, -1,
         TXT_REGULAR, TXT_CENTER, "www.avalanchestudios.net");
     if (DEBUG) {

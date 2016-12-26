@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>
+ * Copyright (C) 2015-2017, Michiel Sikma <michiel@sikma.org>
  * MIT License
  */
 
@@ -16,7 +16,7 @@ bool has_info = false;
 /**
  * Formats system information. Here is an example:
  *
- * CeeGee Engine, (C) 2015-2016, Michiel Sikma (MIT license)
+ * CeeGee Engine, (C) 2015-2017, Michiel Sikma (MIT license)
  *
  * TIME=2016-11-24T13:32:40+0100
  * BUILD=103-MASTER 2016-11-24 (DD160F4)

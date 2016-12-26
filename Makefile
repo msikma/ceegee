@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2016, Michiel Sikma <michiel@sikma.org>
+# Copyright (C) 2015-2017, Michiel Sikma <michiel@sikma.org>
 # MIT license
 
 # Ensure that Bash is used for Makefile recipes.
@@ -24,7 +24,7 @@ else
 endif
 
 TITLE     = CeeGee Engine
-COPYRIGHT = (C) 2015-2016, Michiel Sikma (MIT license)
+COPYRIGHT = (C) 2015-2017, Michiel Sikma (MIT license)
 URL       = https://github.com/msikma/ceegee
 
 BIN       = ${EXENAME}.exe
